@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+    postgres:
+        image: postgres:14
+        environment:
+            - POSTGRES_DB=main
+            - POSTGRES_USER={{ env.POSTGRES_USER }}
+            - POSTGRES_PASSWORD={{ env.POSTGRES_PASSWORD }}
+        volumes:
+            - main_vol:/var/lib/postgresql/data:rw
+        restart: always
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready", "-U", "usr"]
+
+    back:
+        image: {{ env.BACKEND_IMAGE }}
+        environment:
+            - DATABASE_URL={{ env.DATABASE_URL }}
+            - HASH_ROUNDS={{ env.HASH_ROUNDS }}
+            - JWT_SECRET={{ env.JWT_SECRET }}
+            - PORT=3001
+        restart: always
+        depends_on:
+            - postgres
+
+    front:
+        image: {{ env.FRONTEND_IMAGE }}
+        restart: always
+        depends_on:
+            - back
+        ports:
+            - 80:80
+
+volumes:
+    main_vol:

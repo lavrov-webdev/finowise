@@ -1,0 +1,41 @@
+.container {
+  max-width: 1200px;
+  width: 100%;
+  max-height: calc(100vh - 40px);
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 1fr 2fr;
+  grid-template-columns: 2fr 3fr;
+  grid-template-areas:
+    "envelopes summary"
+    "envelopes transactions";
+  gap: 20px;
+
+  &Loader {
+    height: 100vh;
+  }
+}
+
+.summary {
+  overflow-y: auto;
+  grid-area: summary;
+}
+
+.envelopes {
+  overflow-y: auto;
+  grid-area: envelopes;
+}
+
+.transactions {
+  overflow-y: auto;
+  grid-area: transactions;
+  position: relative;
+
+  .withNoEnvelope {
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

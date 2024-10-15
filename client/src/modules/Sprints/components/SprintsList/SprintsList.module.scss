@@ -1,0 +1,29 @@
+.year {
+  &Block {
+    margin: 24px 0;
+  }
+
+  &Title {
+    margin-bottom: 6px;
+    display: block;
+  }
+}
+
+.sprints {
+  &Grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+  }
+
+  &Item {
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    color: inherit;
+
+    &Card {
+      padding: 16px 0;
+    }
+  }
+}

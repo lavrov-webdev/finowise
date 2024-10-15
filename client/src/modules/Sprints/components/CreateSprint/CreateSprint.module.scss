@@ -1,0 +1,25 @@
+.form {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 28px;
+}
+
+.dates {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  justify-content: flex-start;
+}
+
+.preview {
+  position: sticky;
+  top: 10px;
+}
+
+.envelopes {
+  &Skeleton {
+    width: 566px;
+    height: 28px;
+  }
+}

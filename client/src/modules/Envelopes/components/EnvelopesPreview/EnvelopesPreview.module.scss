@@ -1,0 +1,14 @@
+.selected {
+  background-color: var(--g-color-base-selection);
+
+  &:hover {
+    background-color: var(--g-color-base-selection-hover) !important;
+  }
+}
+
+.loader {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 70px;
+}

@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+    dev_db:
+        image: postgres:14
+        environment:
+            - POSTGRES_DB=main
+            - POSTGRES_USER=usr
+            - POSTGRES_PASSWORD=pass
+        volumes:
+            - dev_db:/var/lib/postgresql/data:rw
+        restart: always
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready", "-U", "usr"]
+
+    shadow_db:
+        image: postgres:14
+        environment:
+            - POSTGRES_DB=main
+            - POSTGRES_USER=usr
+            - POSTGRES_PASSWORD=pass
+        restart: always
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready", "-U", "usr"]
+
+    back:
+        build: ./server            
+        restart: always
+        depends_on:
+            - dev_db
+            - shadow_db
+
+    front:
+        build: ./client
+        restart: always
+        depends_on:
+            - back
+        ports:
+            - 80:80
+
+volumes:
+    dev_db:

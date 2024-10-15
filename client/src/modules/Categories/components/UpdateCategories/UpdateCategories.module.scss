@@ -1,0 +1,46 @@
+.subtitle {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.cardContent {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.editCategories {
+  &Skeleton {
+    width: 100%;
+    height: 40px;
+  }
+
+  &EditableCategory {
+    &View {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding-left: 9px;
+      cursor: pointer;
+      border-radius: var(--g-border-radius-m);
+
+      &.toDelete {
+        color: var(--g-color-text-hint);
+        background: var(--g-color-base-generic-accent-disabled);
+        cursor: default;
+      }
+    }
+  }
+}
+
+.createCategories {
+  &Item {
+    display: block;
+    width: 100%;
+  }
+  &AddButton {
+    margin-top: 6px;
+  }
+}
