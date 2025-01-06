@@ -9,7 +9,7 @@ import { Loader } from "@gravity-ui/uikit";
 export const useMenuItems = (): MenuItem[] => {
   const currentSprintIdState = useQuery(getCurrentSprintQueryOptions());
   const currentSprintString = useMemo(
-    () => currentSprintIdState.data?.id?.toString() || "current",
+    () => currentSprintIdState.data?.data?.id?.toString() || "current",
     [currentSprintIdState.data],
   );
   return useMemo(

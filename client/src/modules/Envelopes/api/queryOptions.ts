@@ -1,7 +1,7 @@
 import { filterUndefined } from "@system/utils/filterUndefined";
 import { ENVELOPES_QUERY_KEY } from "./consts";
 import { queryOptions } from "@tanstack/react-query";
-import { getEnvelopesByDate } from "./requests/getEnvelopesByDate";
+import { envelopesControllerGetByDate } from "@generated";
 
 type TGetEnvelopesQueryKeyProps = {
   id?: number;
@@ -16,6 +16,6 @@ export const getEnvelopesQueryKey = (props?: TGetEnvelopesQueryKeyProps) =>
 export const getEnvelopesByDateQueryOptions = (date?: string) =>
   queryOptions({
     queryKey: getEnvelopesQueryKey({ filters: { date } }),
-    queryFn: () => getEnvelopesByDate(date!),
+    queryFn: () => envelopesControllerGetByDate({ path: { date: date! } }),
     enabled: !!date,
   });

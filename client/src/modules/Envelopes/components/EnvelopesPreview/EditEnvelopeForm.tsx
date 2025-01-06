@@ -31,7 +31,7 @@ export const EditEnvelopeForm: FC<Props> = ({ onClose, envelope }) => {
   });
 
   const handleSubmit = (data: TEditEnvelopeDtoOut) => {
-    editEnvelopeMutation.mutate(data);
+    editEnvelopeMutation.mutate({ envelope: data, envelopeId: data.id });
   };
   return (
     <Card title="Редактировать конверт">

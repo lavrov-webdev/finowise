@@ -35,7 +35,7 @@ export const Form = () => {
   useEffect(() => {
     form.setValue(
       "envelopes",
-      categoriesState.data?.reduce<TCreateEnvelopeDto[]>((prev, category) => {
+      categoriesState.data?.data?.reduce<TCreateEnvelopeDto[]>((prev, category) => {
         if (category.isActive) {
           prev.push({
             amount: 0,

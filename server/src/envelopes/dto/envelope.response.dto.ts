@@ -1,6 +1,5 @@
-import { ApiProperty, PickType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { CategoryResponseDto } from 'src/categories/dto/category.response.dto';
-import { SprintResponseDto } from 'src/sprints/dto/sprint.response.dto';
 import { TransactionResponseDto } from 'src/transactions/dto/transaction.response.dto';
 
 export class EnvelopeResponseDto {
@@ -26,24 +25,11 @@ export class EnvelopeResponseDto {
   userId: number;
 }
 
-export class EnvelopeWithTransactionsResponseDto extends EnvelopeResponseDto {
+export class EnvelopeDetailedResponseDto extends EnvelopeResponseDto {
   @ApiProperty({ type: [TransactionResponseDto] })
   transactions: TransactionResponseDto[];
+
+  @ApiProperty({ type: CategoryResponseDto })
+  category: CategoryResponseDto;
 }
 
-export class EnvelopeWithSprintDatesAndCategoryInfo extends EnvelopeResponseDto {
-  @ApiProperty({
-    example: {
-      startDate: '2023-08-18T08:48:30.883Z',
-      endDate: '2023-08-18T08:48:30.883Z',
-    },
-    type: () => PickType(SprintResponseDto, ["startDate", "endDate"])
-  })
-  sprint: Pick<SprintResponseDto, 'startDate' | 'endDate'>;
-
-  @ApiProperty({
-    type: () => PickType(CategoryResponseDto, ['name']),
-    example: { name: 'current category name' }
-  })
-  category: Pick<CategoryResponseDto, 'name'>;
-}

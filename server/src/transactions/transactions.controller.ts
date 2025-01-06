@@ -26,8 +26,8 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import {
-  TransactionWithCategoryName,
   TransactionResponseDto,
+  TransactionDetailedResponseDto
 } from './dto/transaction.response.dto';
 
 @ApiTags('transactions')
@@ -50,33 +50,20 @@ export class TransactionsController {
   }
 
   @Get()
-  @ApiOkResponse({ type: [TransactionWithCategoryName] })
+  @ApiOkResponse({ type: [TransactionDetailedResponseDto] })
   findAll(
     @Request() req: RequestWithUser,
-  ): Promise<TransactionWithCategoryName[]> {
+  ): Promise<TransactionDetailedResponseDto[]> {
     return this.transactionsService.findAll(req.user.id);
   }
 
-  @Get(':id')
-  @ApiOkResponse({ type: TransactionResponseDto })
-  @ApiNotFoundResponse({ description: 'Transactions not found' })
-  findOne(
-    @Param('id') id: string,
-    @Request() req: RequestWithUser,
-  ): Promise<TransactionResponseDto> {
-    return this.transactionsService.findOne(+id, req.user.id);
-  }
-
-  @Get('bysprint/:sprintId')
-  @ApiOkResponse({ type: [TransactionWithCategoryName] })
-  @ApiNotFoundResponse({
-    description: 'Transactions for that sprintId and userId not found',
-  })
+  @Get('by_sprint/:sprintId')
+  @ApiOkResponse({ type: [TransactionDetailedResponseDto] })
   findBySprint(
     @Param('sprintId') sprintId: string,
     @Request() req: RequestWithUser,
-  ): Promise<TransactionWithCategoryName[]> {
-    return this.transactionsService.findBySprint(+sprintId, req.user.id);
+  ): Promise<TransactionDetailedResponseDto[]> {
+    return this.transactionsService.findBySprint(req.user.id, +sprintId);
   }
 
   @Patch(':id')

@@ -13,4 +13,7 @@ export class CategoryResponseDto extends CreateCategoryDto {
 
   @ApiProperty({ example: 2 })
   userId: number;
+
+  @ApiProperty({example: true})
+  isActive: boolean;
 }

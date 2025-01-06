@@ -6,6 +6,7 @@ import {
   FormTextInput,
 } from "@components/Form";
 import { ModalFooter } from "@components/ModalFooter";
+import { TransactionResponseDto } from "@generated";
 import { FormRow } from "@gravity-ui/components";
 import { Button, Modal } from "@gravity-ui/uikit";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,7 +15,6 @@ import {
   EditTransactionDto,
   TEditTransactionDto,
   TEditTransactionDtoOut,
-  TGetTransactionDto,
 } from "@modules/Transactions/types";
 import { DATE_FORMAT } from "@system/consts";
 import dayjs from "dayjs";
@@ -23,7 +23,7 @@ import { useForm } from "react-hook-form";
 
 type Props = {
   isOpen: boolean;
-  transaction: TGetTransactionDto;
+  transaction: TransactionResponseDto;
   onClose: () => void;
 };
 
@@ -42,8 +42,8 @@ export const EditTransactionModal: FC<Props> = ({
   const editTransactionMutation = useEditTransaction(onClose);
   const onSubmit = (data: TEditTransactionDtoOut) => {
     editTransactionMutation.mutate({
-      editTransaction: data,
-      id: transaction.id,
+      transaction: data,
+      transactionId: transaction.id,
     });
   };
   return (

@@ -1,7 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 import {
-  EnvelopeResponseDto,
-  EnvelopeWithTransactionsResponseDto,
+  EnvelopeDetailedResponseDto
 } from 'src/envelopes/dto/envelope.response.dto';
 import { envelopeExample, trancationExample } from './examples';
 
@@ -28,23 +27,7 @@ export class SprintResponseDto {
   userId: number;
 }
 
-export class SprintResponseWithTotalSpendingsAndPlainDto extends SprintResponseDto {
-  @ApiProperty({ example: 2000 })
-  totalSpendings: number;
-
-  @ApiProperty({ example: 5000 })
-  totalPlain: number;
-}
-
-export class SprintResponseWithEnvelopesDto extends SprintResponseDto {
-  @ApiProperty({
-    example: [envelopeExample],
-    type: EnvelopeResponseDto,
-  })
-  envelopes: EnvelopeResponseDto[];
-}
-
-export class SprintResponseDetailedInfo extends SprintResponseDto {
+export class SprintDetailedResponseDto extends SprintResponseDto {
   @ApiProperty({
     example: [
       {
@@ -52,10 +35,18 @@ export class SprintResponseDetailedInfo extends SprintResponseDto {
         transactions: [trancationExample],
       },
     ],
-    type: [EnvelopeWithTransactionsResponseDto],
+    type: [EnvelopeDetailedResponseDto],
   })
-  envelopes: EnvelopeWithTransactionsResponseDto[];
+  envelopes: EnvelopeDetailedResponseDto[];
 
   @ApiProperty({ example: 2000 })
   currentBalance: number;
+
+  @ApiProperty({ example: 2000 })
+  totalSpendings: number;
+
+  @ApiProperty({ example: 5000 })
+  totalPlain: number;
 }
+
+export class SprintIdDto extends PickType(SprintResponseDto, ['id']) { }

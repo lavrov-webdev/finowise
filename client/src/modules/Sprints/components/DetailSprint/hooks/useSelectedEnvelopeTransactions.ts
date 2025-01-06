@@ -1,17 +1,21 @@
-import { TGetEnvelopeWithTransactionsDto } from "@modules/Envelopes";
+import { EnvelopeDetailedResponseDto } from "@generated";
 import { useMemo } from "react";
 
 export const useSelectedEnvelopeTransactions = (
-  envelopes: TGetEnvelopeWithTransactionsDto[],
+  envelopes: EnvelopeDetailedResponseDto[],
   selectedEnvelopeId: number | null,
 ) => {
   return useMemo(() => {
     if (selectedEnvelopeId === null) {
       return [];
     }
-    return (
-      envelopes.find((envelope) => envelope.id === selectedEnvelopeId)
-        ?.transactions || []
-    );
+    const selectedEnvelope = envelopes.find((envelope) => envelope.id === selectedEnvelopeId)
+    if (!selectedEnvelope) {
+      return []
+    }
+    return selectedEnvelope.transactions.map(transaction => ({
+      ...transaction,
+      category: selectedEnvelope.category
+    })) || []
   }, [envelopes, selectedEnvelopeId]);
 };

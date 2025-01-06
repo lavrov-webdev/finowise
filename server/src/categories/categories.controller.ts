@@ -10,8 +10,8 @@ import {
   Request,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
+import { CreateCategoriesArrayDto, CreateCategoryDto } from './dto/create-category.dto';
+import { UpdateCategoriesArrayDto, UpdateCategoryDto } from './dto/update-category.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import {
   ApiBadRequestResponse,
@@ -31,13 +31,13 @@ import { RequestWithUser } from 'src/interfaces';
 @Controller('categories')
 @UseGuards(AuthGuard)
 export class CategoriesController {
-  constructor(private readonly categoriesService: CategoriesService) {}
+  constructor(private readonly categoriesService: CategoriesService) { }
 
   @Post()
   @ApiCreatedResponse({ type: [CategoryResponseDto] })
   @ApiBadRequestResponse({ description: 'Validation error' })
   create(
-    @Body() createCategoriesDto: [CreateCategoryDto],
+    @Body() createCategoriesDto: CreateCategoriesArrayDto,
     @Request() req: RequestWithUser,
   ): Promise<CategoryResponseDto[]> {
     return this.categoriesService.create(createCategoriesDto, req.user.id);
@@ -63,10 +63,10 @@ export class CategoriesController {
   @ApiOkResponse({ type: [CategoryResponseDto] })
   @ApiNotFoundResponse({ description: 'Category not found' })
   update(
-    @Body() updateCategoryDto: UpdateCategoryDto[],
+    @Body() updateCategoryDto: UpdateCategoriesArrayDto,
     @Request() req: RequestWithUser,
   ): Promise<CategoryResponseDto[]> {
-    return this.categoriesService.update(updateCategoryDto, req.user.id);
+    return this.categoriesService.update(updateCategoryDto.categories, req.user.id);
   }
 
   @Delete(':id')

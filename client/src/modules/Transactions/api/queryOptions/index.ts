@@ -1,7 +1,7 @@
 import { filterUndefined } from "@system/utils/filterUndefined";
 import { TRANSACTIONS_QUERY_KEY } from "../consts";
 import { queryOptions } from "@tanstack/react-query";
-import { getTransactions } from "../requests/getTransactions";
+import { transactionsControllerFindAll, transactionsControllerFindBySprint } from "@generated";
 
 type QueryKeyParams = {
   id?: number;
@@ -16,5 +16,12 @@ export const getTransactionsQueryKey = (params?: QueryKeyParams) =>
 export const getTransactionsQueryOptions = () =>
   queryOptions({
     queryKey: getTransactionsQueryKey(),
-    queryFn: getTransactions,
+    queryFn: transactionsControllerFindAll,
+  });
+
+export const getTransactionsBySprintQueryOptions = (sprintId?: number) =>
+  queryOptions({
+    queryKey: getTransactionsQueryKey({ filters: { sprintId } }),
+    queryFn: () => transactionsControllerFindBySprint({ path: { sprintId: sprintId!.toString() } }),
+    enabled: !!sprintId
   });

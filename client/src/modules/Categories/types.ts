@@ -10,16 +10,6 @@ export const EditCategoryDto = CreateCategoryDto.extend({
 });
 export type TEditCategoryDto = z.infer<typeof EditCategoryDto>;
 
-export const GetCategoryDto = CreateCategoryDto.extend({
-  id: z.number().min(0),
-  createdAt: z.string().datetime(),
-  isActive: z.boolean(),
-  userId: z.number().min(0),
-});
-export type TGetCategoryDto = z.infer<typeof GetCategoryDto>;
-
-export const GetCategoriesDto = z.array(GetCategoryDto);
-
 export const UpdateCategoriesFormFields = z.object({
   newCategories: CreateCategoryDto.array(),
   editableCategories: EditCategoryDto.array(),

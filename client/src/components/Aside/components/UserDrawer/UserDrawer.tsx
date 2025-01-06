@@ -9,7 +9,7 @@ export const UserDrawer = () => {
     return <Loader />;
   }
 
-  if (!userInfoState.data?.id) {
+  if (!userInfoState.data?.data?.id) {
     return <div>Вы не авторизованы</div>;
   }
   return (
@@ -20,10 +20,10 @@ export const UserDrawer = () => {
       justifyContent="flex-start"
     >
       <div>
-        <b>Id</b> - {userInfoState.data.id}
+        <b>Id</b> - {userInfoState.data.data?.id}
       </div>
       <div>
-        <b>Email</b> - {userInfoState.data.email}
+        <b>Email</b> - {userInfoState.data.data?.email}
       </div>
       <Button view="outlined-danger" onClick={() => logoutMutation.mutate()}>
         Выйти <Icon data={ArrowRightFromSquare} />

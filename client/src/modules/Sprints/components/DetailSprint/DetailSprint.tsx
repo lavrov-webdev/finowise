@@ -30,7 +30,7 @@ export const DetailSprint: FC<Props> = ({ sprintId }) => {
     "Не удалось загрузить спринт",
   );
   const selectedEnvelopeTransactions = useSelectedEnvelopeTransactions(
-    sprintState.data?.envelopes || [],
+    sprintState.data?.data?.envelopes || [],
     selectedEnvelopeId,
   );
 

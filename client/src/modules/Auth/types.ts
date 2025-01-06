@@ -9,14 +9,6 @@ export const AuthDto = z.object({
 });
 export type TAuthDto = z.infer<typeof AuthDto>;
 
-export const UserDto = z.object({
-  id: z.number(),
-  email: z.string().email(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-});
-export type TUserDto = z.infer<typeof UserDto>;
-
 export enum TAuthFormType {
   signIn = "signIn",
   signUp = "signUp",

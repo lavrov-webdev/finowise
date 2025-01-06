@@ -37,6 +37,7 @@ model Category {
   envelopes    Envelope[]
   transactions Transaction[]
 
+
   @@unique([name, userId])
 }
 

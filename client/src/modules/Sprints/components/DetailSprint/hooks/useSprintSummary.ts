@@ -1,9 +1,9 @@
-import { TGetSprintWithEnvelopesAndTransactionsDto } from "@modules/Sprints";
+import { SprintDetailedResponseDto } from "@generated";
 import { TSprintSummary } from "../types";
 import { useMemo } from "react";
 
 export const useSprintSummary = (
-  sprint: TGetSprintWithEnvelopesAndTransactionsDto | null,
+  sprint: SprintDetailedResponseDto | null,
 ): TSprintSummary => {
   return useMemo(() => {
     if (!sprint) {

@@ -6,12 +6,28 @@ import { EnvelopesService } from 'src/envelopes/envelopes.service';
 
 @Injectable()
 export class TransactionsService {
+  findBySprint(userId: number, sprintId: number): Promise<import("./dto/transaction.response.dto").TransactionDetailedResponseDto[]> {
+    return this.prisma.transaction.findMany({
+      where: { userId, sprintId },
+      orderBy: [
+        {
+          date: "desc"
+        },
+        {
+          id: "desc"
+        }
+      ],
+      include: {
+        category: true,
+      },
+    })
+  }
   constructor(
     private prisma: PrismaService,
     private envelopesService: EnvelopesService,
-  ) {}
+  ) { }
   async create(createTransactionDto: CreateTransactionDto, userId: number) {
-    const findedEnvelope = await this.envelopesService.getOne(
+    const foundedEnvelope = await this.envelopesService.getOne(
       createTransactionDto.envelopeId,
       userId,
     );
@@ -19,8 +35,8 @@ export class TransactionsService {
       data: {
         ...createTransactionDto,
         userId,
-        categoryId: findedEnvelope.categoryId,
-        sprintId: findedEnvelope.sprintId,
+        categoryId: foundedEnvelope.categoryId,
+        sprintId: foundedEnvelope.sprintId,
       },
     });
   }
@@ -37,38 +53,9 @@ export class TransactionsService {
         }
       ],
       include: {
-        category: {
-          select: {
-            name: true,
-          },
-        },
+        category: true,
       },
     });
-  }
-
-  async findBySprint(sprintId: number, userId: number) {
-    return this.prisma.transaction.findMany({
-      where: { userId, sprintId },
-      orderBy: [
-        {
-          id: "asc"
-        },
-        {
-          date: "asc"
-        },
-      ],
-      include: {
-        category: {
-          select: {
-            name: true,
-          },
-        },
-      },
-    });
-  }
-
-  findOne(id: number, userId: number) {
-    return this.checkIsUsersTransactionOrThrow(id, userId);
   }
 
   async update(

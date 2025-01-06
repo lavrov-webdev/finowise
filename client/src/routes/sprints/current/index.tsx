@@ -12,7 +12,7 @@ import { useMemo } from "react";
 export const Route = createFileRoute("/sprints/current/")({
   loader: async () => {
     const t = await queryClient.ensureQueryData(getCurrentSprintQueryOptions());
-    queryClient.ensureQueryData(getSprintByIdQueryOptions(t.id));
+    queryClient.ensureQueryData(getSprintByIdQueryOptions(t.data?.id));
   },
   component: Component,
 });
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/sprints/current/")({
 function Component() {
   const currentSprint = useQuery(getCurrentSprintQueryOptions());
   const sprintId = useMemo(
-    () => currentSprint.data?.id?.toString(),
+    () => currentSprint.data?.data?.id?.toString(),
     [currentSprint.data],
   );
   const navigate = Route.useNavigate();

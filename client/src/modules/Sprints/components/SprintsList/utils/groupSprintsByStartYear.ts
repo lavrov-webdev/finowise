@@ -1,5 +1,5 @@
-import { TGetSprintDto } from "@modules/Sprints/types";
+import { SprintResponseDto } from "@generated";
 import { groupBy } from "@system/utils/groupBy";
 
-export const groupSprintsByStartYear = (sprints: TGetSprintDto[]) =>
+export const groupSprintsByStartYear = (sprints: SprintResponseDto[]) =>
   groupBy(sprints, (sprint) => new Date(sprint.startDate).getFullYear());

@@ -1,9 +1,9 @@
+import { EnvelopeDetailedResponseDto } from "@generated";
 import { SelectOption } from "@gravity-ui/uikit";
-import { TGetEnvelopesWithCategoryNameAndSprintDates } from "@modules/Envelopes";
 import { useMemo } from "react";
 
 export const useEnvelopesOptions = (
-  envelopes: TGetEnvelopesWithCategoryNameAndSprintDates[],
+  envelopes: EnvelopeDetailedResponseDto[],
 ): SelectOption[] => {
   return useMemo(
     () =>

@@ -16,7 +16,7 @@ import { EmptyList } from "./EmptyList";
 export const SprintsList = () => {
   const sprintsState = useQuery(getSprintsQueryOptions());
   const sprintsByYears = useMemo(
-    () => groupSprintsByStartYear(sprintsState.data || []),
+    () => groupSprintsByStartYear(sprintsState.data?.data || []),
     [sprintsState.data],
   );
   useErrorNotifier(
@@ -26,7 +26,7 @@ export const SprintsList = () => {
   let content: React.ReactElement | React.ReactElement[];
   if (sprintsState.isLoading) {
     content = <ListSkeleton />;
-  } else if (sprintsState.data?.length === 0) {
+  } else if (sprintsState.data?.data?.length === 0) {
     content = <EmptyList />;
   } else {
     content = Object.entries(sprintsByYears).map(([year, sprints]) => {

@@ -1,16 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
-import { createTransaction } from "../requests/createTransaction";
 import { queryClient } from "@system/queryClient";
 import { getTransactionsQueryKey } from "../queryOptions";
 import { getSprintQueryKey } from "@modules/Sprints";
+import { CreateTransactionDto, transactionsControllerCreate } from "@generated";
 
 export const useCreateTransaction = () => {
   return useMutation({
-    mutationFn: createTransaction,
-    onSuccess: (data) => {
+    mutationFn: (transaction: CreateTransactionDto) => transactionsControllerCreate({ body: transaction }),
+    onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: getTransactionsQueryKey() });
       queryClient.invalidateQueries({
-        queryKey: getSprintQueryKey(data.sprintId),
+        queryKey: getSprintQueryKey(response.data?.sprintId),
       });
     },
   });

@@ -26,7 +26,7 @@ export const Aside = () => {
       compact={isAsideCompact}
       renderContent={() => (
         <div className={styles.main}>
-          {userState.data?.id ? <Outlet /> : <AuthPage />}
+          {userState.data?.data?.id ? <Outlet /> : <AuthPage />}
         </div>
       )}
       logo={{

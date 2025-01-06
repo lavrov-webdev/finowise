@@ -27,13 +27,10 @@ export class TransactionResponseDto {
   sprintId: number;
 
   @ApiProperty({ example: 1 })
-  categoryId: number | null;
-
-  @ApiProperty({ example: 1 })
   userId: number;
 }
 
-export class TransactionWithCategoryName extends TransactionResponseDto {
-  @ApiProperty({ example: { name: 'current category name' } })
-  category: Pick<CategoryResponseDto, 'name'>;
+export class TransactionDetailedResponseDto extends TransactionResponseDto {
+  @ApiProperty({ example: { id: 1, name: 'Test category' } })
+  category: CategoryResponseDto;
 }

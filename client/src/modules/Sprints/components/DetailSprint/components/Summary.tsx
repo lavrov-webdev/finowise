@@ -16,7 +16,7 @@ type Props = {
 
 export const Summary: FC<Props> = ({ sprintId }) => {
   const sprintState = useQuery(getSprintByIdQueryOptions(sprintId));
-  const sprintSummary = useSprintSummary(sprintState.data || null);
+  const sprintSummary = useSprintSummary(sprintState.data?.data || null);
 
   const currentBalance = useFormatAmount(sprintSummary.currentBalance);
   const initialAmount = useFormatAmount(sprintSummary.initialAmount);

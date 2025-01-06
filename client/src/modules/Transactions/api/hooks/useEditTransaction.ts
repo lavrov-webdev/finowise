@@ -2,18 +2,20 @@ import { getSprintQueryKey } from "@modules/Sprints";
 import { queryClient } from "@system/queryClient";
 import { useMutation } from "@tanstack/react-query";
 import { getTransactionsQueryKey } from "../queryOptions";
-import { editTransaction } from "../requests/editTransaction";
+import { transactionsControllerUpdate, UpdateTransactionDto } from "@generated";
 
 export const useEditTransaction = (onSuccess: () => void) => {
   return useMutation({
-    mutationFn: editTransaction,
-    onSuccess: (data) => {
+    mutationFn: (
+      { transaction, transactionId }: { transaction: UpdateTransactionDto, transactionId: number }
+    ) => transactionsControllerUpdate({ body: transaction, path: { id: transactionId.toString() } }),
+    onSuccess: (response) => {
       Promise.all([
         queryClient.invalidateQueries({
-          queryKey: getTransactionsQueryKey({ id: data.id }),
+          queryKey: getTransactionsQueryKey(),
         }),
         queryClient.invalidateQueries({
-          queryKey: getSprintQueryKey(data.sprintId),
+          queryKey: getSprintQueryKey(response.data?.sprintId),
         }),
       ]).then(() => onSuccess());
     },

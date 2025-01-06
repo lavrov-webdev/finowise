@@ -1,11 +1,11 @@
-import { TGetEnvelopeWithTransactionsDto } from "@modules/Envelopes/types";
 import { useMemo } from "react";
 import { TEnvelopeSummary } from "../types";
 import { useQuery } from "@tanstack/react-query";
 import { getCategoriesQueryOptions } from "@modules/Categories";
+import { EnvelopeDetailedResponseDto } from "@generated";
 
 export const useEnvelopesSummary = (
-  envelopes: TGetEnvelopeWithTransactionsDto[],
+  envelopes: EnvelopeDetailedResponseDto[],
 ): TEnvelopeSummary[] => {
   const categories = useQuery(getCategoriesQueryOptions());
   return useMemo(() => {
@@ -20,7 +20,7 @@ export const useEnvelopesSummary = (
         totalExpenses,
         remainingBudget: envelope.amount - totalExpenses,
         categoryName:
-          categories.data?.find(
+          categories.data?.data?.find(
             (category) => category.id === envelope.categoryId,
           )?.name || "",
       };

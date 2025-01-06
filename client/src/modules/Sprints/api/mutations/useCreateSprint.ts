@@ -1,16 +1,15 @@
-import { TCreateSprintDto } from "@modules/Sprints/types";
+import { CreateSprintDto, sprintsControllerCreate } from "@generated";
 import { useAddErrorToaster, useAddSuccessToaster } from "@system/hooks";
 import { queryClient } from "@system/queryClient";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { getCurrentSprintQueryKey, getSprintQueryKey } from "../queryOptions";
-import { createSprint } from "../requests/createSprint";
 
 export const useCreateSprint = () => {
   const errorToaster = useAddErrorToaster();
   const successToaster = useAddSuccessToaster();
   return useMutation({
-    mutationFn: (sprint: TCreateSprintDto) => createSprint(sprint),
+    mutationFn: (sprint: CreateSprintDto) => sprintsControllerCreate({ body: sprint }),
     onSuccess: () => {
       successToaster("Спринт создан");
       queryClient.invalidateQueries({

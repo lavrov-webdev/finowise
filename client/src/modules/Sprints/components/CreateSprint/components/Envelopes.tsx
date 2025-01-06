@@ -22,7 +22,7 @@ export const Envelopes = () => {
         <FormRow
           key={envelope.rhfId}
           label={
-            categoriesState.data?.find((c) => c.id === envelope.categoryId)
+            categoriesState.data?.data?.find((c) => c.id === envelope.categoryId)
               ?.name
           }
         >

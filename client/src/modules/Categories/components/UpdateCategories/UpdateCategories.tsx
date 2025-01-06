@@ -1,3 +1,4 @@
+import { Card } from "@components/Card";
 import { FormProvider } from "@components/Form";
 import { Button, Flex } from "@gravity-ui/uikit";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,7 +13,6 @@ import { useForm } from "react-hook-form";
 import { CreateCategories } from "./components/CreateCategories";
 import { EditCategories } from "./components/EditCategories";
 import { categoriesToDeleteAtom } from "./store";
-import { Card } from "@components/Card";
 
 export const UpdateCategories = () => {
   const form = useForm<TUpdateCategoriesFormFields>({
@@ -32,12 +32,12 @@ export const UpdateCategories = () => {
     }
     form.setValue(
       "editableCategories",
-      loadedCategories.data.filter((c) => c.isActive),
+      loadedCategories.data.data?.filter((c) => c.isActive) || [],
     );
   }, [loadedCategories.data]);
   const onSubmit = (data: TUpdateCategoriesFormFields) => {
     const editableCategories = data.editableCategories.filter(
-      (c) => !categoriesToDelete.has(c.id),
+      (category) => !categoriesToDelete.has(category.id),
     );
     mutate({
       categoriesToDelete,

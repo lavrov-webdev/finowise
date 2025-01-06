@@ -11,7 +11,7 @@ import { EnvelopesService } from './envelopes.service';
 import { UpdateEnvelopeDto } from './dto/update-envelope.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { DateTransformer } from 'src/transformers/date.transformer';
-import { EnvelopeResponseDto, EnvelopeWithSprintDatesAndCategoryInfo } from './dto/envelope.response.dto';
+import { EnvelopeResponseDto, EnvelopeDetailedResponseDto } from './dto/envelope.response.dto';
 import {
   ApiCookieAuth,
   ApiNotFoundResponse,
@@ -43,12 +43,12 @@ export class EnvelopesController {
 
   @ApiParam({ name: 'date', example: '2023-06-23', type: String })
   @Get('by_date/:date')
-  @ApiOkResponse({ type: [EnvelopeWithSprintDatesAndCategoryInfo] })
+  @ApiOkResponse({ type: [EnvelopeDetailedResponseDto] })
   getByDate(
     @Param('date', DateTransformer)
     date: string,
     @Request() req: RequestWithUser,
-  ): Promise<EnvelopeResponseDto[]> {
+  ): Promise<EnvelopeDetailedResponseDto[]> {
     return this.envelopesService.getAllByDate(date, req.user.id);
   }
 }

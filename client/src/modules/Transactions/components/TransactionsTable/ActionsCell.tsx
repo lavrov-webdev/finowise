@@ -1,12 +1,12 @@
 import { DropdownMenu } from "@gravity-ui/uikit";
-import { TGetTransactionDto } from "@modules/Transactions/types";
 import { useModal } from "@system/hooks";
 import { FC } from "react";
 import { EditTransactionModal } from "../EditTransactionModal";
 import { useDeleteTransaction } from "@modules/Transactions/api/hooks/useDeleteTransaction";
+import { TransactionResponseDto } from "@generated";
 
 type Props = {
-  transaction: TGetTransactionDto;
+  transaction: TransactionResponseDto;
 };
 
 export const ActionsCell: FC<Props> = ({ transaction }) => {

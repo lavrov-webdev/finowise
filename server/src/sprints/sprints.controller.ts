@@ -26,9 +26,8 @@ import {
 } from '@nestjs/swagger';
 import {
   SprintResponseDto,
-  SprintResponseDetailedInfo,
-  SprintResponseWithEnvelopesDto,
-  SprintResponseWithTotalSpendingsAndPlainDto,
+  SprintDetailedResponseDto,
+  SprintIdDto,
 } from './dto/sprint.response.dto';
 
 @ApiTags('sprints')
@@ -40,43 +39,43 @@ export class SprintsController {
   constructor(private readonly sprintsService: SprintsService) { }
 
   @Post()
-  @ApiCreatedResponse({ type: SprintResponseWithEnvelopesDto })
+  @ApiCreatedResponse({ type: SprintResponseDto })
   @ApiBadRequestResponse({ description: 'Validation error' })
   create(
     @Body() createSprintDto: CreateSprintDto,
     @Request() req: RequestWithUser,
-  ): Promise<SprintResponseWithEnvelopesDto> {
+  ): Promise<SprintResponseDto> {
     return this.sprintsService.create(createSprintDto, req.user.id);
   }
 
   @Get()
-  @ApiOkResponse({ type: [SprintResponseWithTotalSpendingsAndPlainDto] })
+  @ApiOkResponse({ type: [SprintResponseDto] })
   findAll(
     @Request() req: RequestWithUser,
-  ): Promise<SprintResponseWithTotalSpendingsAndPlainDto[]> {
+  ): Promise<SprintResponseDto[]> {
     return this.sprintsService.findAll(req.user.id);
   }
 
   @Get('current')
   @ApiOkResponse({
-    type: PickType(SprintResponseDto, ['id']),
+    type: SprintIdDto,
   })
   @ApiNotFoundResponse({ description: 'Sprint not found' })
   findCurrent(
     @Request() req: RequestWithUser,
-  ): Promise<Pick<SprintResponseDto, 'id'>> {
+  ): Promise<SprintIdDto> {
     return this.sprintsService.findCurrent(req.user.id);
   }
 
   @Get(':id')
   @ApiOkResponse({
-    type: SprintResponseDetailedInfo,
+    type: SprintDetailedResponseDto,
   })
   @ApiNotFoundResponse({ description: 'Sprint not found' })
   findOne(
     @Param('id') id: string,
     @Request() req: RequestWithUser,
-  ): Promise<SprintResponseDetailedInfo> {
+  ): Promise<SprintDetailedResponseDto> {
     return this.sprintsService.findOne(+id, req.user.id);
   }
 

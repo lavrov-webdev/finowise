@@ -4,6 +4,7 @@ import {
   FormProvider,
 } from "@components/Form";
 import { ModalFooter } from "@components/ModalFooter";
+import { SprintResponseDto } from "@generated";
 import { FormRow } from "@gravity-ui/components";
 import { Button } from "@gravity-ui/uikit";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,7 +13,6 @@ import {
   EditSprintDto,
   TEditSprintDtoInput,
   TEditSprintDtoOutput,
-  TGetSprintDto,
 } from "@modules/Sprints/types";
 import { DATE_FORMAT } from "@system/consts";
 import { useAddSuccessToaster, useModal } from "@system/hooks";
@@ -23,7 +23,7 @@ import { useForm } from "react-hook-form";
 type ModalProps = ReturnType<typeof useModal>;
 
 type Props = {
-  sprint: TGetSprintDto;
+  sprint: SprintResponseDto;
   modalProps?: ModalProps;
 };
 
@@ -40,8 +40,8 @@ export const EditSprintForm: FC<Props> = ({ sprint, modalProps }) => {
   });
   const onSubmit = async (data: TEditSprintDtoOutput) => {
     await editSprintMutation.mutateAsync({
-      editSprintDto: data,
-      id: sprint.id,
+      sprint: data,
+      sprintId: sprint.id,
     });
     addSuccessToaster("Спринт был отредактирован");
     modalProps?.closeModal();

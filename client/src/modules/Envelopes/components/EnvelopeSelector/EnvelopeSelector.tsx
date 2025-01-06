@@ -10,7 +10,7 @@ type Props = {
 
 export const EnvelopeSelector: FC<Props> = ({ date }) => {
   const envelopesState = useQuery(getEnvelopesByDateQueryOptions(date));
-  const options = useEnvelopesOptions(envelopesState.data || []);
+  const options = useEnvelopesOptions(envelopesState.data?.data || []);
 
   return (
     <FormSelector
