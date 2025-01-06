@@ -13,7 +13,7 @@ async function bootstrap() {
     .addCookieAuth("access_token")
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("docs", app, document);
+  SwaggerModule.setup("api/docs", app, document);
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.enableCors({
     origin: process.env.DEV === "true" || "https://bbabrjced7868pqsc83u.containers.yandexcloud.net",
