@@ -1,17 +1,11 @@
 import {
+  Body,
   Controller,
   Get,
-  Body,
-  Patch,
   Param,
-  Request,
-  UseGuards,
+  Patch,
+  Request
 } from '@nestjs/common';
-import { EnvelopesService } from './envelopes.service';
-import { UpdateEnvelopeDto } from './dto/update-envelope.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { DateTransformer } from 'src/transformers/date.transformer';
-import { EnvelopeResponseDto, EnvelopeDetailedResponseDto } from './dto/envelope.response.dto';
 import {
   ApiCookieAuth,
   ApiNotFoundResponse,
@@ -21,11 +15,14 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { RequestWithUser } from 'src/interfaces';
+import { DateTransformer } from 'src/transformers/date.transformer';
+import { EnvelopeDetailedResponseDto, EnvelopeResponseDto } from './dto/envelope.response.dto';
+import { UpdateEnvelopeDto } from './dto/update-envelope.dto';
+import { EnvelopesService } from './envelopes.service';
 
 @ApiTags('envelopes')
 @ApiCookieAuth()
 @ApiUnauthorizedResponse({ description: 'Auth is needed' })
-@UseGuards(AuthGuard)
 @Controller('envelopes')
 export class EnvelopesController {
   constructor(private readonly envelopesService: EnvelopesService) { }

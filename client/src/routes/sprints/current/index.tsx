@@ -1,19 +1,13 @@
 import { Alert } from "@gravity-ui/uikit";
 import {
   DetailSpritnLoader,
-  getCurrentSprintQueryOptions,
-  getSprintByIdQueryOptions,
+  getCurrentSprintQueryOptions
 } from "@modules/Sprints";
-import { queryClient } from "@system/queryClient";
 import { useQuery } from "@tanstack/react-query";
 import { Navigate, createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 
 export const Route = createFileRoute("/sprints/current/")({
-  loader: async () => {
-    const t = await queryClient.ensureQueryData(getCurrentSprintQueryOptions());
-    queryClient.ensureQueryData(getSprintByIdQueryOptions(t.data?.id));
-  },
   component: Component,
 });
 

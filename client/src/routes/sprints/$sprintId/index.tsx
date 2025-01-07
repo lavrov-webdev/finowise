@@ -1,12 +1,7 @@
-import { DetailSprint, getSprintByIdQueryOptions } from "@modules/Sprints";
-import { queryClient } from "@system/queryClient";
+import { DetailSprint } from "@modules/Sprints";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/sprints/$sprintId/")({
-  loader: (route) =>
-    queryClient.ensureQueryData(
-      getSprintByIdQueryOptions(+route.params.sprintId),
-    ),
   component: Component,
 });
 

@@ -18,6 +18,7 @@ export const getSprintByIdQueryOptions = (id?: number) =>
     queryKey: getSprintQueryKey(id),
     queryFn: () => sprintsControllerFindOne({ path: { id: id!.toString() } }),
     enabled: !!id,
+    retry: false
   });
 
 export const getCurrentSprintQueryOptions = () =>

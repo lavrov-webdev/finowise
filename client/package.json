@@ -27,6 +27,7 @@
     "@tanstack/router-cli": "^1.51.0",
     "@tanstack/router-devtools": "^1.51.5",
     "axios": "^1.7.5",
+    "axios-retry": "^4.5.0",
     "classnames": "^2.5.1",
     "dayjs": "^1.11.13",
     "jotai": "^2.9.3",

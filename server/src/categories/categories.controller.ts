@@ -1,18 +1,13 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  UseGuards,
-  Request,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Request
 } from '@nestjs/common';
-import { CategoriesService } from './categories.service';
-import { CreateCategoriesArrayDto, CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoriesArrayDto, UpdateCategoryDto } from './dto/update-category.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
 import {
   ApiBadRequestResponse,
   ApiCookieAuth,
@@ -22,14 +17,16 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { CategoryResponseDto } from './dto/category.response.dto';
 import { RequestWithUser } from 'src/interfaces';
+import { CategoriesService } from './categories.service';
+import { CategoryResponseDto } from './dto/category.response.dto';
+import { CreateCategoriesArrayDto } from './dto/create-category.dto';
+import { UpdateCategoriesArrayDto } from './dto/update-category.dto';
 
 @ApiTags('categories')
 @ApiCookieAuth()
 @ApiUnauthorizedResponse({ description: 'Auth is needed' })
 @Controller('categories')
-@UseGuards(AuthGuard)
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) { }
 

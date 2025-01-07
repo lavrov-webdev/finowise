@@ -1,21 +1,15 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  UseGuards,
+  Get,
+  Param,
+  Patch,
+  Post,
   Request,
   UsePipes,
-  ValidationPipe,
+  ValidationPipe
 } from '@nestjs/common';
-import { TransactionsService } from './transactions.service';
-import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { UpdateTransactionDto } from './dto/update-transaction.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { RequestWithUser } from 'src/interfaces';
 import {
   ApiBadRequestResponse,
   ApiCookieAuth,
@@ -25,15 +19,18 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { RequestWithUser } from 'src/interfaces';
+import { CreateTransactionDto } from './dto/create-transaction.dto';
 import {
-  TransactionResponseDto,
-  TransactionDetailedResponseDto
+  TransactionDetailedResponseDto,
+  TransactionResponseDto
 } from './dto/transaction.response.dto';
+import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { TransactionsService } from './transactions.service';
 
 @ApiTags('transactions')
 @ApiCookieAuth()
 @ApiUnauthorizedResponse({ description: 'Auth is needed' })
-@UseGuards(AuthGuard)
 @Controller('transactions')
 @UsePipes(new ValidationPipe({ transform: true }))
 export class TransactionsController {

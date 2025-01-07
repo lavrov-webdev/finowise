@@ -7,5 +7,5 @@ export const userInfoQueryOptions = queryOptions({
   queryFn: async () => {
     return usersControllerGetMe();
   },
-  retry: true,
+  retry: false,
 });

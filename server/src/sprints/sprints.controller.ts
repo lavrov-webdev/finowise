@@ -1,19 +1,13 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  UseGuards,
-  Request,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Request
 } from '@nestjs/common';
-import { SprintsService } from './sprints.service';
-import { CreateSprintDto } from './dto/create-sprint.dto';
-import { UpdateSprintDto } from './dto/update-sprint.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { RequestWithUser } from 'src/interfaces';
 import {
   ApiBadRequestResponse,
   ApiCookieAuth,
@@ -21,19 +15,21 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
-  ApiUnauthorizedResponse,
-  PickType,
+  ApiUnauthorizedResponse
 } from '@nestjs/swagger';
+import { RequestWithUser } from 'src/interfaces';
+import { CreateSprintDto } from './dto/create-sprint.dto';
 import {
-  SprintResponseDto,
   SprintDetailedResponseDto,
   SprintIdDto,
+  SprintResponseDto,
 } from './dto/sprint.response.dto';
+import { UpdateSprintDto } from './dto/update-sprint.dto';
+import { SprintsService } from './sprints.service';
 
 @ApiTags('sprints')
 @ApiCookieAuth()
 @ApiUnauthorizedResponse({ description: 'Auth is needed' })
-@UseGuards(AuthGuard)
 @Controller('sprints')
 export class SprintsController {
   constructor(private readonly sprintsService: SprintsService) { }

@@ -7,6 +7,8 @@ import { EnvelopesModule } from './envelopes/envelopes.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -21,5 +23,11 @@ import { PrismaModule } from './prisma/prisma.module';
     TransactionsModule,
     PrismaModule,
   ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard
+    }
+  ]
 })
-export class AppModule {}
+export class AppModule { }

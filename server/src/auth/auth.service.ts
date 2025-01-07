@@ -9,6 +9,7 @@ import { SignInDto } from './dto/signin.dto';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { Response } from 'express';
+import { UserResponseDto } from 'src/users/dto/user.response.dto';
 
 @Injectable()
 export class AuthService {
@@ -17,34 +18,38 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) { }
 
-  async signIn(signInDto: SignInDto, res: Response) {
-    const user = await this.userService.findByEmail(signInDto.email);
-    if (!user) throw new NotFoundException('User not found');
+  async validateUser(email: string, password: string) {
+    const user = await this.userService.findByEmail(email);
+    if (!user) {
+      return null
+    }
+
     const isPasswordValid = await bcrypt.compare(
-      signInDto.password,
+      password,
       user.password,
     );
-    if (!isPasswordValid)
-      throw new NotFoundException('Password or email is incorrect');
-    const accessToken = await this.getAccessToken(user.id, user.email);
-    this.setCookie(res, accessToken);
+    if (isPasswordValid) {
+      const { password, ...res } = user
+      return res
+    }
+
+    return null
   }
 
-  async signUp(signUpDto: CreateUserDto, res: Response) {
+  async signIn(user: UserResponseDto) {
+    return this.getAccessToken(user.id, user.email);
+  }
+
+  async signUp(signUpDto: CreateUserDto) {
     const user = await this.userService.findByEmail(signUpDto.email);
     if (user) throw new ConflictException('User with that email already exist');
     const createdUser = await this.userService.create({
       ...signUpDto,
     });
-    const accessToken = await this.getAccessToken(
+    return this.getAccessToken(
       createdUser.id,
       createdUser.email,
     );
-    this.setCookie(res, accessToken);
-  }
-
-  async logout(res: Response) {
-    res.clearCookie('access_token');
   }
 
   private getAccessToken(id: number, email: string) {
@@ -54,11 +59,4 @@ export class AuthService {
     };
     return this.jwtService.signAsync(payload);
   }
-
-  private setCookie = (res: Response, accessToken: string) => {
-    res.cookie('access_token', accessToken, {
-      expires: new Date(Date.now() + 60_000 * 60 * 24 * 30),
-      httpOnly: true,
-    });
-  };
 }

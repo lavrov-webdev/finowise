@@ -1,19 +1,13 @@
 import {
-  Controller,
-  Get,
   Body,
-  Patch,
+  Controller,
   Delete,
-  Request,
-  UseGuards,
+  Get,
   HttpCode,
   HttpStatus,
+  Patch,
+  Request
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { RequestWithUser } from 'src/interfaces';
-import { UpdatePasswordDto } from './dto/update-password.dto';
-import { UpdateEmailDto } from './dto/update-email.dto';
 import {
   ApiBadRequestResponse,
   ApiCookieAuth,
@@ -22,13 +16,16 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { RequestWithUser } from 'src/interfaces';
+import { UpdateEmailDto } from './dto/update-email.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 import { UserResponseDto } from './dto/user.response.dto';
+import { UsersService } from './users.service';
 
 @ApiTags('users')
 @ApiCookieAuth()
 @ApiUnauthorizedResponse({ description: 'Auth is needed' })
 @Controller('users')
-@UseGuards(AuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

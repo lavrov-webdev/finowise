@@ -10,8 +10,10 @@ export const useSignIn = () => {
   return useMutation({
     mutationKey: [AUTH_QUERY_KEY],
     mutationFn: (data: SignInDto) => authControllerSignIn({ body: data }),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: [AUTH_QUERY_KEY] }),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries()
+      await queryClient.clear()
+    },
     onError(error: AxiosError) {
       addErrorToast("Ошибка авторизации", error);
     },

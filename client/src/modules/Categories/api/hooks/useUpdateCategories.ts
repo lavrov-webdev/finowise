@@ -15,7 +15,6 @@ export const useUpdateCategories = (onSuccess: () => void) => {
       queryClient.invalidateQueries({ queryKey: getCategoriesQueryKey() });
     },
     onError: (error: AxiosError) => {
-      console.log("error")
       addErrorToaster("Не удалось обновить категории", error);
     },
   });

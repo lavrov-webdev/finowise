@@ -10,7 +10,6 @@ import { Summary } from "./components/Summary";
 import { useSelectedEnvelopeTransactions } from "./hooks/useSelectedEnvelopeTransactions";
 import { selectedEnvelopeAtom } from "./store/selectedEnvelopeTransactions";
 import { Alert, Text } from "@gravity-ui/uikit";
-import { useErrorNotifier } from "@system/hooks";
 import { AxiosError } from "axios";
 import { useNavigate } from "@tanstack/react-router";
 
@@ -25,10 +24,6 @@ export const DetailSprint: FC<Props> = ({ sprintId }) => {
   const onSelectEnvelope = (envelope: TEnvelopeSummary) => {
     selectEnvelope(envelope.id);
   };
-  useErrorNotifier(
-    sprintState.error as AxiosError,
-    "Не удалось загрузить спринт",
-  );
   const selectedEnvelopeTransactions = useSelectedEnvelopeTransactions(
     sprintState.data?.data?.envelopes || [],
     selectedEnvelopeId,
