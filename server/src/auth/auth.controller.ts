@@ -26,7 +26,7 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response
   ) {
     const token = await this.authService.signIn(req.user);
-    response.cookie("jwt", token)
+    this.setJwtCookie(response, token)
   }
 
   @ApiCreatedResponse({ description: 'User was successfully created' })
@@ -38,7 +38,7 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response
   ) {
     const token = await this.authService.signUp(signUpDto);
-    response.cookie("jwt", token)
+    this.setJwtCookie(response, token)
   }
 
   @ApiNoContentResponse({ description: 'User was successfully logout' })
@@ -46,5 +46,10 @@ export class AuthController {
   async logout(@Res() res: Response) {
     res.clearCookie("jwt")
     res.sendStatus(HttpStatus.NO_CONTENT)
+  }
+
+
+  private setJwtCookie(res: Response, token: string) {
+    res.cookie("jwt", token, { httpOnly: true, secure: process.env.DEV !== 'true', maxAge: 30 * 24 * 60 * 60 * 1000 })
   }
 }
