@@ -18,7 +18,7 @@ RUN yarn prisma generate
 
 RUN yarn build
 
-FROM node:18-alpine AS runner
+FROM node:18 AS runner
 
 WORKDIR /app
 
