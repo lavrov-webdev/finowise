@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "rsbuild dev --open",
     "build": "rsbuild build",
+    "build:analyze": "BUNDLE_ANALYZE=true rsbuild build",
     "format": "prettier --write ./src",
     "preview": "rsbuild preview",
     "generate:routes": "tsr generate",
