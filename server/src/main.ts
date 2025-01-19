@@ -6,7 +6,6 @@ import * as cookieParser from "cookie-parser";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.setGlobalPrefix('api');
   const config = new DocumentBuilder()
     .setTitle("Finances app")
     .setDescription("App for managing your personal finances")
