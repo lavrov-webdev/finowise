@@ -1,0 +1,55 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    env:
+        CR_REGISTRY: cr.yandex/crpm2tqmm6mt5iv04uaa
+        IMAGE_TAG: ${{ github.sha }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Login to Yandex Cloud Container Registry
+      id: login-cr
+      uses: yc-actions/yc-cr-login@v2
+      with:
+        yc-sa-json-credentials: ${{ secrets.YC_PUSHER_CREDS }}
+
+    - name: Build and push backend
+      run: |
+        docker build ./server -t $CR_REGISTRY/server:$IMAGE_TAG
+        docker push $CR_REGISTRY/server:$IMAGE_TAG
+
+    - name: Build and push frontend
+      run: |
+        docker build ./client -t $CR_REGISTRY/client:$IMAGE_TAG
+        docker push $CR_REGISTRY/client:$IMAGE_TAG
+
+    - name: Deploy COI VM
+      id: deploy-coi
+      uses: yc-actions/yc-coi-deploy@v2
+      env:
+        SSH_KEY: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC/BIE/yja4FZHjiPkdmOp97XVM630URHrOd9SlvPEElKF5BwrTJW/eEyb9eSZ0J/1JZQ/HyT70kkELRHMD2b4ye+1qdhPxbDCs3EsFVvM2Ws0yXz46aJDkxx4mQ4cb5DOevTFZpakjGPJoJB1pRkNKvT28ZBwqhA78gZuzSCIcbk6FBxZ8es8WMJSVwlV+s3niOQNh68KeXf2ie7t5446xQq5iCPBPmaP5eNBZCzLjKGB8TZ85cd9RiWLukX/d9iMhzduLrNwd9M5vnyscyuqkNqvv7y5o9/Ynhaaxt4otLyZZeQXBiLA42FHTQ4B30nAlCzQTb7zmvU7WO5RLB7mhdm7xIm/Q2wS9lrbTFbX6qFfiG4lquhiUCmqmC2sC0HuM7Inv85YWkBWBFSwq44fj54Q8tNIFz+JEVc9Et+C2uMirG0jTG0gPg4SsTgg8h3+iMsGV6PBxQlsxmmnsdQPv301pXcj3TKpfQdVQJypzrVjrmbA6Z2oOKjC+kRuAbfk= dm-lavrov@dm-lavrov-os"
+        BACKEND_IMAGE: $CR_REGISTRY/server:$IMAGE_TAG
+        FRONTEND_IMAGE: $CR_REGISTRY/client:$IMAGE_TAG
+      with:
+        yc-sa-json-credentials: ${{ secrets.YC_VM_ADMIN_CREDS }}
+        folder-id: b1gq1dhshocbcbf2s936
+        vm-name: finowise
+        vm-service-account-id: ajeobchiepnts8larppd
+        vm-cores: 2
+        vm-memory: 4Gb
+        vm-core-fraction: 100
+        vm-subnet-id: e2lco5k0rrd4j7qmehdt
+        user-data-path: './user-data.yaml'
+        docker-compose-path: './docker-compose.yaml'
+
+    
