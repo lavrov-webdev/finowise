@@ -1,15 +1,18 @@
-# Базовый образ для сборки порядка
 FROM node:18-alpine AS builder
 
-# Устанавливаем рабочую директорию в контейнере
 WORKDIR /app
 
-# Копируем package.json и yarn.lock в контейнер
+ARG DATABASE_URL
+
+ENV DATABASE_URL=${DATABASE_URL}
+
 COPY package.json yarn.lock ./
 
 RUN yarn --frozen-lockfile
 
 COPY . .
+
+RUN yarn prisma migrate deploy
 
 RUN yarn prisma generate
 
@@ -21,8 +24,5 @@ WORKDIR /app
 
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package.json package.json
-
-RUN yarn prisma migrate deploy
 
 CMD ["node", "dist/main"]
