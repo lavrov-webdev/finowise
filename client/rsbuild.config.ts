@@ -11,4 +11,12 @@ export default defineConfig({
     title: "Finowise",
     favicon: "./src/assets/favicon.ico",
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        pathRewrite: { '^/api': '' },
+      },
+    }
+  }
 });

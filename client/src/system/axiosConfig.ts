@@ -2,10 +2,7 @@ import { client } from "@generated";
 import axiosRetry from 'axios-retry'
 
 client.setConfig({
-    baseURL:
-        process.env.NODE_ENV === "development"
-            ? "http://localhost:3001"
-            : "",
+    baseURL: "/api",
     withCredentials: true,
     throwOnError: true,
 })

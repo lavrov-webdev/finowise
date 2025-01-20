@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+    dev_db:
+        image: postgres:14
+        environment:
+            - POSTGRES_DB=finances
+            - POSTGRES_USER=user
+            - POSTGRES_PASSWORD=password
+        volumes:
+            - dev_db:/var/lib/postgresql/data:rw
+        ports:
+          - 5432:5432
+        restart: always
+volumes:
+    dev_db:

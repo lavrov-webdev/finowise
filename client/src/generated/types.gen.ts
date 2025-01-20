@@ -63,11 +63,6 @@ export type OmitTypeClass = {
     amount: number;
 };
 
-export type SignInDto = {
-    email: string;
-    password: string;
-};
-
 export type SprintDetailedResponseDto = {
     id: number;
     createdAt: string;
@@ -160,10 +155,6 @@ export type UserResponseDto = {
     id: number;
     createdAt: string;
     updatedAt: string;
-};
-
-export type AuthControllerSignInData = {
-    body: SignInDto;
 };
 
 export type AuthControllerSignInResponse = (void);
