@@ -52,11 +52,11 @@ export const Form = () => {
     <Card title="Новая транзакция">
       <form className={styles.form} onSubmit={form.handleSubmit(submitHandler)}>
         <FormProvider {...form}>
-          <FormRow label="Сумма" required>
-            <FormAmountInput name="amount" />
-          </FormRow>
           <FormRow label="Дата" required>
             <FormDatePicker name="date" withNextDayButton />
+          </FormRow>
+          <FormRow label="Сумма" required>
+            <FormAmountInput name="amount" />
           </FormRow>
           <FormRow label="Конверт" required>
             <EnvelopeSelector date={form.getValues("date")} />
