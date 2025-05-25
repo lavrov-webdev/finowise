@@ -8,7 +8,8 @@ import {
   Post,
   Request,
   UsePipes,
-  ValidationPipe
+  ValidationPipe,
+  Query
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -21,6 +22,7 @@ import {
 } from '@nestjs/swagger';
 import { RequestWithUser } from 'src/interfaces';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
+import { FilterTransactionsDto } from './dto/filter-transactions.dto';
 import {
   TransactionDetailedResponseDto,
   TransactionResponseDto
@@ -48,21 +50,14 @@ export class TransactionsController {
 
   @Get()
   @ApiOkResponse({ type: [TransactionDetailedResponseDto] })
-  findAll(
+  @ApiBadRequestResponse({ description: 'Validation error' })
+  search(
+    @Query() filterDto: FilterTransactionsDto,
     @Request() req: RequestWithUser,
   ): Promise<TransactionDetailedResponseDto[]> {
-    return this.transactionsService.findAll(req.user.id);
+    return this.transactionsService.findTransactions(filterDto, req.user.id);
   }
-
-  @Get('by_sprint/:sprintId')
-  @ApiOkResponse({ type: [TransactionDetailedResponseDto] })
-  findBySprint(
-    @Param('sprintId') sprintId: string,
-    @Request() req: RequestWithUser,
-  ): Promise<TransactionDetailedResponseDto[]> {
-    return this.transactionsService.findBySprint(req.user.id, +sprintId);
-  }
-
+  
   @Patch(':id')
   @ApiOkResponse({ type: TransactionResponseDto })
   @ApiNotFoundResponse({ description: 'Transactions not found' })

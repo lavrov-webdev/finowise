@@ -1,14 +1,11 @@
 import {
   ConflictException,
   Injectable,
-  NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
-import { SignInDto } from './dto/signin.dto';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { Response } from 'express';
 import { UserResponseDto } from 'src/users/dto/user.response.dto';
 
 @Injectable()

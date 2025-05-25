@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   IsDateString,
   IsInt,
@@ -15,18 +15,21 @@ export class FilterTransactionsDto {
   @IsOptional()
   @IsInt()
   @Min(1)
+  @Type(() => Number)
   sprintId?: number;
 
   @ApiProperty({ example: 1, required: false, description: 'Filter by category ID' })
   @IsOptional()
   @IsInt()
   @Min(1)
+  @Type(() => Number)
   categoryId?: number;
 
   @ApiProperty({ example: 1, required: false, description: 'Filter by envelope ID' })
   @IsOptional()
   @IsInt()
   @Min(1)
+  @Type(() => Number)
   envelopeId?: number;
 
   @ApiProperty({ 
@@ -58,6 +61,7 @@ export class FilterTransactionsDto {
   @IsOptional()
   @IsInt()
   @Min(0)
+  @Type(() => Number)
   amountMin?: number;
 
   @ApiProperty({ 
@@ -69,6 +73,7 @@ export class FilterTransactionsDto {
   @IsOptional()
   @IsInt()
   @Min(0)
+  @Type(() => Number)
   amountMax?: number;
 
   @ApiProperty({ 
@@ -113,6 +118,7 @@ export class FilterTransactionsDto {
   @IsInt()
   @Min(1)
   @Max(100)
+  @Type(() => Number)
   limit?: number;
 
   @ApiProperty({ 
@@ -124,5 +130,6 @@ export class FilterTransactionsDto {
   @IsOptional()
   @IsInt()
   @Min(0)
+  @Type(() => Number)
   offset?: number;
 } 

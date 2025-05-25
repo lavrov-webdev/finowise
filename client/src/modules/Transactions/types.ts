@@ -1,4 +1,4 @@
-import { TransactionDetailedResponseDto, TransactionResponseDto } from "@generated";
+import { TransactionDetailedResponseDto } from "@generated";
 import { z } from "zod";
 
 const BaseTransaction = z.object({

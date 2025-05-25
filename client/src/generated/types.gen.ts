@@ -63,6 +63,11 @@ export type OmitTypeClass = {
     amount: number;
 };
 
+export type SignInDto = {
+    email: string;
+    password: string;
+};
+
 export type SprintDetailedResponseDto = {
     id: number;
     createdAt: string;
@@ -155,6 +160,10 @@ export type UserResponseDto = {
     id: number;
     createdAt: string;
     updatedAt: string;
+};
+
+export type AuthControllerSignInData = {
+    body: SignInDto;
 };
 
 export type AuthControllerSignInResponse = (void);
@@ -313,19 +322,62 @@ export type TransactionsControllerCreateResponse = (TransactionResponseDto);
 
 export type TransactionsControllerCreateError = (unknown);
 
-export type TransactionsControllerFindAllResponse = (Array<TransactionDetailedResponseDto>);
-
-export type TransactionsControllerFindAllError = (unknown);
-
-export type TransactionsControllerFindBySprintData = {
-    path: {
-        sprintId: string;
+export type TransactionsControllerSearchData = {
+    query?: {
+        /**
+         * Maximum amount for filtering
+         */
+        amountMax?: number;
+        /**
+         * Minimum amount for filtering
+         */
+        amountMin?: number;
+        /**
+         * Filter by category ID
+         */
+        categoryId?: number;
+        /**
+         * Search in comment (partial match)
+         */
+        comment?: string;
+        /**
+         * Start date for filtering (inclusive)
+         */
+        dateFrom?: string;
+        /**
+         * End date for filtering (inclusive)
+         */
+        dateTo?: string;
+        /**
+         * Filter by envelope ID
+         */
+        envelopeId?: number;
+        /**
+         * Number of records per page
+         */
+        limit?: number;
+        /**
+         * Number of records to skip
+         */
+        offset?: number;
+        /**
+         * Field to order by
+         */
+        orderBy?: 'date' | 'amount' | 'id' | 'createdAt';
+        /**
+         * Order direction
+         */
+        orderDirection?: 'asc' | 'desc';
+        /**
+         * Filter by sprint ID
+         */
+        sprintId?: number;
     };
 };
 
-export type TransactionsControllerFindBySprintResponse = (Array<TransactionDetailedResponseDto>);
+export type TransactionsControllerSearchResponse = (Array<TransactionDetailedResponseDto>);
 
-export type TransactionsControllerFindBySprintError = (unknown);
+export type TransactionsControllerSearchError = (unknown);
 
 export type TransactionsControllerUpdateData = {
     body: UpdateTransactionDto;

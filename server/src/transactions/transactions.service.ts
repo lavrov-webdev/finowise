@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { FilterTransactionsDto } from './dto/filter-transactions.dto';
+import { TransactionDetailedResponseDto } from './dto/transaction.response.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { EnvelopesService } from 'src/envelopes/envelopes.service';
 import { Prisma } from '@prisma/client';
@@ -16,7 +17,7 @@ export class TransactionsService {
   async findTransactions(
     filterDto: FilterTransactionsDto,
     userId: number,
-  ) {
+  ): Promise<TransactionDetailedResponseDto[]> {
     // Build dynamic where clause
     const where: Prisma.TransactionWhereInput = { userId };
 
@@ -105,24 +106,8 @@ export class TransactionsService {
       queryOptions.skip = filterDto.offset;
     }
 
-    return this.prisma.transaction.findMany(queryOptions);
-  }
-
-  findBySprint(userId: number, sprintId: number) {
-    return this.prisma.transaction.findMany({
-      where: { userId, sprintId },
-      orderBy: [
-        {
-          date: "desc"
-        },
-        {
-          id: "desc"
-        }
-      ],
-      include: {
-        category: true,
-      },
-    })
+    const result = await this.prisma.transaction.findMany(queryOptions);
+    return result as unknown as TransactionDetailedResponseDto[];
   }
 
   async create(createTransactionDto: CreateTransactionDto, userId: number) {
@@ -136,23 +121,6 @@ export class TransactionsService {
         userId,
         categoryId: foundedEnvelope.categoryId,
         sprintId: foundedEnvelope.sprintId,
-      },
-    });
-  }
-
-  findAll(userId: number) {
-    return this.prisma.transaction.findMany({
-      where: { userId },
-      orderBy: [
-        {
-          date: "desc"
-        },
-        {
-          id: "desc"
-        }
-      ],
-      include: {
-        category: true,
       },
     });
   }
