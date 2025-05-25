@@ -10,4 +10,7 @@ export const getCategoriesQueryOptions = () =>
     queryFn: () => {
       return categoriesControllerFindAll();
     },
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
