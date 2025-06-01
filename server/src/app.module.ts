@@ -15,6 +15,7 @@ import { LoggerMiddleware } from './middlewares/logger';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: process.env.DEV === 'true' ? '.env.local' : '.env',
     }),
     AuthModule,
     UsersModule,

@@ -1,6 +1,7 @@
 import { Body, Controller, HttpStatus, Post, Request, Res, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBody,
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiTags,
@@ -10,6 +11,7 @@ import { Public } from 'src/decorators';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
+import { SignInDto } from './dto/signin.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -18,10 +20,12 @@ export class AuthController {
 
   @ApiNoContentResponse({ description: 'Success login' })
   @ApiBadRequestResponse({ description: 'Validation error' })
+  @ApiBody({ type: SignInDto })
   @UseGuards(LocalAuthGuard)
   @Public()
   @Post('login')
   async signIn(
+    @Body() _: SignInDto,
     @Request() req,
     @Res({ passthrough: true }) response: Response
   ) {

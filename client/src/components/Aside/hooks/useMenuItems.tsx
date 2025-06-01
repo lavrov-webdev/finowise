@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getCurrentSprintQueryOptions } from "@modules/Sprints";
 import { useMemo } from "react";
 import { Loader } from "@gravity-ui/uikit";
+import { CirclePlay, CirclePlus, ListTimeline, Plus, Tag } from "@gravity-ui/icons";
 
 export const useMenuItems = (): MenuItem[] => {
   const currentSprintIdState = useQuery(getCurrentSprintQueryOptions());
@@ -12,7 +13,7 @@ export const useMenuItems = (): MenuItem[] => {
     () => currentSprintIdState.data?.data?.id?.toString() || "current",
     [currentSprintIdState.data],
   );
-  return useMemo(
+  return useMemo<MenuItem[]>(
     () => [
       {
         itemWrapper(p, makeItem) {
@@ -30,6 +31,7 @@ export const useMenuItems = (): MenuItem[] => {
         },
         id: "currentSprint",
         title: "Текущий спринт",
+        icon: CirclePlay
       },
       {
         itemWrapper(p, makeItem) {
@@ -41,6 +43,7 @@ export const useMenuItems = (): MenuItem[] => {
         },
         id: "spirnts",
         title: "Спринты",
+        icon: ListTimeline
       },
       {
         itemWrapper(p, makeItem) {
@@ -52,6 +55,7 @@ export const useMenuItems = (): MenuItem[] => {
         },
         id: "createTransaction",
         title: "Добавить транзакцию",
+        icon: Plus
       },
       {
         itemWrapper(p, makeItem) {
@@ -63,6 +67,7 @@ export const useMenuItems = (): MenuItem[] => {
         },
         id: "createSprint",
         title: "Начать новый спринт",
+        icon: CirclePlus
       },
       {
         id: "categories",
@@ -74,12 +79,8 @@ export const useMenuItems = (): MenuItem[] => {
             </Link>
           );
         },
+        icon: Tag
       },
-      // {
-      //     id: "settings",
-      //     title: "Настройки",
-      //     type: "action",
-      // }
     ],
     [currentSprintIdState],
   );
