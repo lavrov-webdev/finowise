@@ -21,6 +21,7 @@ import { Route as SprintsSprintIdIndexImport } from './routes/sprints/$sprintId/
 // Create Virtual Routes
 
 const SprintsIndexLazyImport = createFileRoute('/sprints/')()
+const DashboardIndexLazyImport = createFileRoute('/dashboard/')()
 const CategoriesIndexLazyImport = createFileRoute('/categories/')()
 const SprintsCreateIndexLazyImport = createFileRoute('/sprints/create/')()
 
@@ -35,6 +36,13 @@ const SprintsIndexLazyRoute = SprintsIndexLazyImport.update({
   path: '/sprints/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/sprints/index.lazy').then((d) => d.Route))
+
+const DashboardIndexLazyRoute = DashboardIndexLazyImport.update({
+  path: '/dashboard/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/dashboard/index.lazy').then((d) => d.Route),
+)
 
 const CategoriesIndexLazyRoute = CategoriesIndexLazyImport.update({
   path: '/categories/',
@@ -83,6 +91,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesIndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/sprints/': {
       id: '/sprints/'
       path: '/sprints'
@@ -126,6 +141,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
   CategoriesIndexLazyRoute,
+  DashboardIndexLazyRoute,
   SprintsIndexLazyRoute,
   SprintsSprintIdIndexRoute,
   SprintsCurrentIndexRoute,
@@ -143,6 +159,7 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/categories/",
+        "/dashboard/",
         "/sprints/",
         "/sprints/$sprintId/",
         "/sprints/current/",
@@ -155,6 +172,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/categories/": {
       "filePath": "categories/index.lazy.tsx"
+    },
+    "/dashboard/": {
+      "filePath": "dashboard/index.lazy.tsx"
     },
     "/sprints/": {
       "filePath": "sprints/index.lazy.tsx"

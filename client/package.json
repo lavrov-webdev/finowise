@@ -13,6 +13,7 @@
     "check": "tsc --noEmit && prettier --check ./src"
   },
   "dependencies": {
+    "@gravity-ui/chartkit": "^7.0.1",
     "@gravity-ui/components": "^3.8.0",
     "@gravity-ui/date-components": "^2.9.0",
     "@gravity-ui/date-utils": "^2.5.3",

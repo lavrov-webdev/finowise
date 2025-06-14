@@ -11,8 +11,8 @@ type QueryKeyParams = {
 export const getTransactionsQueryKey = (params?: QueryKeyParams) =>
   filterUndefined([TRANSACTIONS_QUERY_KEY, params?.id, params?.filters]);
 
-export const getTransactionsQueryOptions = (filters: QueryKeyParams) =>
+export const getTransactionsQueryOptions = (filters?: QueryKeyParams) =>
   queryOptions({
     queryKey: getTransactionsQueryKey(filters),
-    queryFn: () => transactionsControllerSearch({ query: filters.filters }),
+    queryFn: () => transactionsControllerSearch({ query: filters?.filters }),
   });
