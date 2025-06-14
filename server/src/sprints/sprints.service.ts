@@ -98,10 +98,32 @@ export class SprintsService {
   }
 
   async remove(id: number, userId: number) {
-    try {
-      return this.prisma.sprint.delete({ where: { id, userId } });
-    } catch (err) {
+    const sprint = await this.prisma.sprint.findUnique({
+      where: { id, userId },
+      include: {
+        envelopes: {
+          include: {
+            transactions: true
+          }
+        }
+      }
+    });
+
+    if (!sprint) {
       throw new NotFoundException('Sprint not found');
+    }
+
+    try {
+      return await this.prisma.sprint.delete({
+        where: { id, userId }
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new NotFoundException('Sprint not found');
+        }
+      }
+      throw error;
     }
   }
 }
