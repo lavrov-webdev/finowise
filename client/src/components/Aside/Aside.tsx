@@ -1,5 +1,5 @@
 import { isAsideCompactStore } from "@components/Aside/store/isAsideCompactStore";
-import { Gear, Person } from "@gravity-ui/icons";
+import { Gear, House, Person } from "@gravity-ui/icons";
 import { AsideHeader } from "@gravity-ui/navigation";
 
 import { Link, Outlet } from "@tanstack/react-router";
@@ -30,7 +30,7 @@ export const Aside = () => {
         </div>
       )}
       logo={{
-        text: "Finowise 💸",
+        text: "Finowise",
         wrapper(node) {
           return (
             <Link to="/" className={styles.headerLink}>
@@ -38,6 +38,7 @@ export const Aside = () => {
             </Link>
           );
         },
+        icon: House
       }}
       onClosePanel={() => setOpenedAsidePanel(null)}
       panelItems={panelItems}

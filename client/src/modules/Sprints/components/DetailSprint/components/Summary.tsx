@@ -1,14 +1,13 @@
 import { Card } from "@components/Card";
 import { Definition } from "@components/Definition";
+import { Skeleton } from "@components/Skeleton";
+import { Flex } from "@gravity-ui/uikit";
 import { getSprintByIdQueryOptions } from "@modules/Sprints/api";
 import { useFormatAmount } from "@system/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { FC } from "react";
 import styles from "../DetailSprint.module.scss";
 import { useSprintSummary } from "../hooks/useSprintSummary";
-import { Skeleton } from "@components/Skeleton";
-import { Flex } from "@gravity-ui/uikit";
-import { EditSprintModal } from "./EditSprintModal";
 
 type Props = {
   sprintId: number;
@@ -35,12 +34,12 @@ export const Summary: FC<Props> = ({ sprintId }) => {
   if (sprintState.isLoading) {
     return null;
   }
+
   return (
     <Card
       title="Подытог"
       className={styles.summary}
       maxWidth="none"
-      actions={<EditSprintModal sprintId={sprintId} />}
     >
       {sprintState.isLoading ? (
         <Flex direction="column" gap={2}>

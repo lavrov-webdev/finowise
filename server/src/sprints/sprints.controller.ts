@@ -87,8 +87,13 @@ export class SprintsController {
   }
 
   @Delete(':id')
-  @ApiOkResponse({ type: SprintResponseDto })
-  @ApiNotFoundResponse({ description: 'Sprint not found' })
+  @ApiOkResponse({ 
+    type: SprintResponseDto,
+    description: 'Sprint and all its related envelopes and transactions have been successfully deleted'
+  })
+  @ApiNotFoundResponse({ 
+    description: 'Sprint not found or user does not have access to it'
+  })
   remove(
     @Param('id') id: string,
     @Request() req: RequestWithUser,

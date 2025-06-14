@@ -1,7 +1,6 @@
 import { Card } from "@components/Card";
 import { Skeleton } from "@components/Skeleton";
-import { Pencil } from "@gravity-ui/icons";
-import { Button, Icon, Modal } from "@gravity-ui/uikit";
+import { Button, Modal } from "@gravity-ui/uikit";
 import { getSprintByIdQueryOptions } from "@modules/Sprints/api";
 import { useModal } from "@system/hooks";
 import { useQuery } from "@tanstack/react-query";
@@ -22,8 +21,8 @@ export const EditSprintModal: FC<Props> = ({ sprintId }) => {
 
   return (
     <>
-      <Button onClick={modal.openModal}>
-        <Icon data={Pencil} />
+      <Button view="outlined-info" onClick={modal.openModal}>
+        Редактировать спринт
       </Button>
       <Modal open={modal.isOpen} onClose={modal.closeModal}>
         <Card title="Редактировать спринт">
