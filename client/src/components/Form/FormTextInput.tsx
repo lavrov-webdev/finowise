@@ -1,5 +1,4 @@
-import { PasswordInput } from "@gravity-ui/components";
-import { TextInput, TextInputProps } from "@gravity-ui/uikit";
+import { TextInput, TextInputProps, PasswordInput } from "@gravity-ui/uikit";
 import { FC } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
@@ -18,7 +17,7 @@ export const FormTextInput: FC<Props> = ({ name, ...rest }) => {
           <PasswordInput
             {...rest}
             validationState={fieldState.invalid ? "invalid" : undefined}
-            showRevealButton
+            hideRevealButton={false}
             onUpdate={(e) => field.onChange(e)}
             value={field.value}
             errorMessage={fieldState.error?.message}

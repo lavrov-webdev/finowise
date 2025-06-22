@@ -1,0 +1,1 @@
+export { SprintsBarChart } from './SprintsBarChart'; 
