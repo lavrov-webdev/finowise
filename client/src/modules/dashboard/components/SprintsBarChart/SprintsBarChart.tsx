@@ -7,6 +7,9 @@ import { getSprintsQueryOptions } from "@modules/Sprints/api/queryOptions";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { DATE_FORMAT } from "@system/consts";
+import { Flex } from "@gravity-ui/uikit";
+import { CHART_COLORS, CHART_BORDER_COLORS } from "@modules/dashboard/consts";
+import { formatAmount } from "@system/utils/formatAmount";
 
 ChartJS.register(
   CategoryScale,
@@ -27,13 +30,14 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick }) => {
   const sprintsQuery = useQuery(getSprintsQueryOptions());
 
   const chartData = useMemo<ChartData<"bar">>(() => {
-    return {      
+    return {
       labels: Object.keys(data).map(sprintId => {
         const sprint = sprintsQuery.data?.data?.find(sprint => sprint.id === +sprintId);
         return `${dayjs(sprint?.startDate).format(DATE_FORMAT)} - ${dayjs(sprint?.endDate).format(DATE_FORMAT)}`;
       }),
       datasets: [{
-        label: 'Sprints',
+        label: "Sprints",
+        backgroundColor: CHART_COLORS[0],
         data: Object.values(data).map(transactions => transactions.reduce((acc, transaction) => acc - transaction.amount, 0)),
       }],
     };
@@ -45,20 +49,27 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick }) => {
     }
     onClick?.(event);
   };
-  
+
   return (
-    <div>
-      <Bar 
-        height={50}
+    <Flex alignItems="center" justifyContent="center" style={{ width: '50%', maxHeight: "100%" }}>
+      <Bar
+        options={{
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  return ` ${formatAmount(context.raw as number)}`;
+                }
+              }
+            }
+          }
+        }
+        }
         ref={chartRef}
         id='sprints-bar'
         data={chartData}
         onClick={handleClick}
-        options={{
-          color: 'red',
-          backgroundColor: ['red', 'blue', 'green', 'yellow', 'purple', 'orange', 'pink'],
-        }}
       />
-    </div>
+    </Flex>
   );
 }; 

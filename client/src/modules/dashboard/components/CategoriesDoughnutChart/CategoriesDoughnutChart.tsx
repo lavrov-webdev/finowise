@@ -1,10 +1,11 @@
-import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
-import _ from 'lodash';
+import { TransactionDetailedResponseDto } from '@generated';
+import { Flex } from "@gravity-ui/uikit";
+import { getCategoriesQueryOptions } from "@modules/Categories/api/queryOptions";
+import { formatAmount } from "@system/utils/formatAmount";
+import { useQuery } from "@tanstack/react-query";
+import { ArcElement, Chart as ChartJS, ChartOptions, Legend, Tooltip } from "chart.js";
 import React, { MouseEventHandler, useMemo, useRef } from 'react';
 import { Doughnut, getElementAtEvent } from 'react-chartjs-2';
-import { TransactionDetailedResponseDto } from '@generated';
-import { getCategoriesQueryOptions } from "@modules/Categories/api/queryOptions";
-import { useQuery } from "@tanstack/react-query";
 
 ChartJS.register(
   ArcElement,
@@ -27,35 +28,15 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
       transactions.reduce((acc, transaction) => acc + Math.abs(transaction.amount), 0)
     );
 
-    // Цвета для категорий
-    const colors = [
-      'rgba(255, 99, 132, 0.8)',
-      'rgba(54, 162, 235, 0.8)',
-      'rgba(255, 205, 86, 0.8)',
-      'rgba(75, 192, 192, 0.8)',
-      'rgba(255, 159, 64, 0.8)',
-      'rgba(153, 102, 255, 0.8)',
-      'rgba(201, 203, 207, 0.8)',
-      'rgba(255, 99, 132, 0.6)',
-      'rgba(54, 162, 235, 0.6)',
-      'rgba(255, 205, 86, 0.6)',
-    ];
-
     return {
       labels: categories,
       datasets: [{
         data: amounts,
-        backgroundColor: colors.slice(0, categories.length),
-        borderColor: colors.slice(0, categories.length).map(color => color.replace('0.8', '1').replace('0.6', '1')),
-        borderWidth: 2,
-        hoverOffset: 4
       }]
     };
   }, [data, categoriesQuery.data]);
 
-  const options = useMemo(() => ({
-    responsive: true,
-    maintainAspectRatio: false,
+  const options = useMemo<ChartOptions<"doughnut">>(() => ({
     plugins: {
       legend: {
         position: 'bottom' as const,
@@ -67,12 +48,12 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
       },
       tooltip: {
         callbacks: {
-          label: function (context: any) {
+          label: function (context) {
             const label = context.label || '';
-            const value = context.parsed;
+            const value = context.raw as number;
             const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
             const percentage = ((value / total) * 100).toFixed(1);
-            return `${label}: ${value.toFixed(2)} (${percentage}%)`;
+            return ` ${label}: ${formatAmount(value)} (${percentage}%)`;
           }
         }
       }
@@ -87,14 +68,14 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
   };
 
   return (
-    <div style={{ height: '400px', position: 'relative' }}>
-      <Doughnut
-        ref={chartRef}
-        id='categories-doughnut'
-        data={chartData}
-        options={options}
+    <Flex alignItems="center" justifyContent="center" style={{ width: '50%', maxHeight: "100%" }}>
+    <Doughnut
+      ref={chartRef}
+      id='categories-doughnut'
+      data={chartData}
         onClick={handleClick}
+        options={options}
       />
-    </div>
+    </Flex>
   );
 }; 

@@ -4,6 +4,7 @@ import _ from 'lodash';
 import React, { useMemo } from 'react';
 import { SprintsBarChart } from './components/SprintsBarChart';
 import { CategoriesDoughnutChart } from './components/CategoriesDoughnutChart';
+import { Flex } from '@gravity-ui/uikit';
 
 export const Dashboard: React.FC = () => {
   const { data: transactions } = useQuery(getTransactionsQueryOptions());
@@ -15,12 +16,10 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div>
-      <div>
+      <Flex height={500} gap={2} alignItems='center'>
         <SprintsBarChart data={groupedTransactions.bySprint} />
-      </div>
-      <div>
         <CategoriesDoughnutChart data={groupedTransactions.byCategory} />
-      </div>
+      </Flex>
       {Object.entries(groupedTransactions.bySprint).map(([sprintId, transactions]) => (
         <div key={sprintId}>
           <h1>{sprintId} sprint</h1>
