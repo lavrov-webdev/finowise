@@ -24,9 +24,12 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
   const categoriesQuery = useQuery(getCategoriesQueryOptions());
 
   const chartData = useMemo(() => {
-    const categories = Object.keys(data).map(categoryId => categoriesQuery.data?.data?.find(category => category.id === +categoryId)?.name);
-    const amounts = Object.values(data).map(transactions =>
-      transactions.reduce((acc, transaction) => acc + Math.abs(transaction.amount), 0)
+    const categoryIds = Object.keys(data);
+    const categories = categoryIds.map(categoryId => 
+      categoriesQuery.data?.data?.find(category => category.id === +categoryId)?.name
+    );
+    const amounts = categoryIds.map(categoryId =>
+      data[categoryId].reduce((acc, transaction) => acc + Math.abs(transaction.amount), 0)
     );
 
     return {
@@ -66,7 +69,8 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
       const elements = getElementAtEvent(chartRef.current, event);
       if (elements.length > 0) {
         const elementIndex = elements[0].index;
-        const categoryId = +Object.keys(data)[elementIndex];
+        const categoryIds = Object.keys(data);
+        const categoryId = +categoryIds[elementIndex];
         onCategorySelect?.(categoryId);
       }
     }
@@ -74,7 +78,7 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
   };
 
   return (
-    <Flex alignItems="center" justifyContent="center" style={{ width: '50%', maxHeight: "100%" }}>
+    <Flex alignItems="center" justifyContent="center" style={{ width: '50%', maxHeight: "100%", cursor: 'pointer' }}>
     <Doughnut
       ref={chartRef}
       id='categories-doughnut'

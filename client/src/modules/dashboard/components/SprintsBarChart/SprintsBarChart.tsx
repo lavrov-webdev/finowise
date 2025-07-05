@@ -31,15 +31,19 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick, onSpri
   const sprintsQuery = useQuery(getSprintsQueryOptions());
 
   const chartData = useMemo<ChartData<"bar">>(() => {
+    const sprintIds = Object.keys(data);
+    
     return {
-      labels: Object.keys(data).map(sprintId => {
+      labels: sprintIds.map(sprintId => {
         const sprint = sprintsQuery.data?.data?.find(sprint => sprint.id === +sprintId);
         return `${dayjs(sprint?.startDate).format(DATE_FORMAT)} - ${dayjs(sprint?.endDate).format(DATE_FORMAT)}`;
       }),
       datasets: [{
         label: "Sprints",
         backgroundColor: CHART_COLORS[0],
-        data: Object.values(data).map(transactions => transactions.reduce((acc, transaction) => acc - transaction.amount, 0)),
+        data: sprintIds.map(sprintId => 
+          data[sprintId].reduce((acc, transaction) => acc - transaction.amount, 0)
+        ),
       }],
     };
   }, [data, sprintsQuery.data]);
@@ -49,7 +53,8 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick, onSpri
       const elements = getElementAtEvent(chartRef.current, event);
       if (elements.length > 0) {
         const elementIndex = elements[0].index;
-        const sprintId = +Object.keys(data)[elementIndex];
+        const sprintIds = Object.keys(data);
+        const sprintId = +sprintIds[elementIndex];
         onSprintSelect?.(sprintId);
       }
     }

@@ -26,3 +26,11 @@ export const CHART_COLORS = [
     'rgba(255, 192, 203, 1)'
   ]
   Chart.defaults.backgroundColor = CHART_COLORS
+  Chart.defaults.onHover = (event, active) => {
+    const target = event.native?.target as HTMLElement
+    if (active.length > 0 && target) {
+      target.style.cursor = 'pointer'
+    } else {
+      target.style.cursor = 'default'
+    }
+  }
