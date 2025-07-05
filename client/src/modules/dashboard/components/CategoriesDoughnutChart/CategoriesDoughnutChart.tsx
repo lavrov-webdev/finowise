@@ -16,9 +16,10 @@ ChartJS.register(
 interface DoughnutChartProps {
   data: Record<string, TransactionDetailedResponseDto[]>;
   onClick?: MouseEventHandler<HTMLCanvasElement>;
+  onCategorySelect?: (categoryId: number) => void;
 }
 
-export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, onClick }) => {
+export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, onClick, onCategorySelect }) => {
   const chartRef = useRef<ChartJS<"doughnut">>(null);
   const categoriesQuery = useQuery(getCategoriesQueryOptions());
 
@@ -62,7 +63,12 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
 
   const handleClick: MouseEventHandler<HTMLCanvasElement> = (event) => {
     if (chartRef.current) {
-      console.log(getElementAtEvent(chartRef.current, event));
+      const elements = getElementAtEvent(chartRef.current, event);
+      if (elements.length > 0) {
+        const elementIndex = elements[0].index;
+        const categoryId = +Object.keys(data)[elementIndex];
+        onCategorySelect?.(categoryId);
+      }
     }
     onClick?.(event);
   };

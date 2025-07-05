@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { DATE_FORMAT } from "@system/consts";
 import { Flex } from "@gravity-ui/uikit";
-import { CHART_COLORS, CHART_BORDER_COLORS } from "@modules/dashboard/consts";
+import { CHART_COLORS } from "@modules/dashboard/consts";
 import { formatAmount } from "@system/utils/formatAmount";
 
 ChartJS.register(
@@ -23,9 +23,10 @@ ChartJS.register(
 interface BarChartProps {
   data: Record<string, TransactionDetailedResponseDto[]>;
   onClick?: MouseEventHandler<HTMLCanvasElement>;
+  onSprintSelect?: (sprintId: number) => void;
 }
 
-export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick }) => {
+export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick, onSprintSelect }) => {
   const chartRef = useRef<ChartJS<"bar">>(null);
   const sprintsQuery = useQuery(getSprintsQueryOptions());
 
@@ -41,11 +42,16 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick }) => {
         data: Object.values(data).map(transactions => transactions.reduce((acc, transaction) => acc - transaction.amount, 0)),
       }],
     };
-  }, [data]);
+  }, [data, sprintsQuery.data]);
 
   const handleClick: MouseEventHandler<HTMLCanvasElement> = (event) => {
     if (chartRef.current) {
-      console.log(getElementAtEvent(chartRef.current, event));
+      const elements = getElementAtEvent(chartRef.current, event);
+      if (elements.length > 0) {
+        const elementIndex = elements[0].index;
+        const sprintId = +Object.keys(data)[elementIndex];
+        onSprintSelect?.(sprintId);
+      }
     }
     onClick?.(event);
   };

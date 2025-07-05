@@ -14,6 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as DashboardIndexImport } from './routes/dashboard/index'
 import { Route as TransactionsCreateIndexImport } from './routes/transactions/create/index'
 import { Route as SprintsCurrentIndexImport } from './routes/sprints/current/index'
 import { Route as SprintsSprintIdIndexImport } from './routes/sprints/$sprintId/index'
@@ -21,7 +22,6 @@ import { Route as SprintsSprintIdIndexImport } from './routes/sprints/$sprintId/
 // Create Virtual Routes
 
 const SprintsIndexLazyImport = createFileRoute('/sprints/')()
-const DashboardIndexLazyImport = createFileRoute('/dashboard/')()
 const CategoriesIndexLazyImport = createFileRoute('/categories/')()
 const SprintsCreateIndexLazyImport = createFileRoute('/sprints/create/')()
 
@@ -37,19 +37,17 @@ const SprintsIndexLazyRoute = SprintsIndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/sprints/index.lazy').then((d) => d.Route))
 
-const DashboardIndexLazyRoute = DashboardIndexLazyImport.update({
-  path: '/dashboard/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/dashboard/index.lazy').then((d) => d.Route),
-)
-
 const CategoriesIndexLazyRoute = CategoriesIndexLazyImport.update({
   path: '/categories/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
   import('./routes/categories/index.lazy').then((d) => d.Route),
 )
+
+const DashboardIndexRoute = DashboardIndexImport.update({
+  path: '/dashboard/',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const SprintsCreateIndexLazyRoute = SprintsCreateIndexLazyImport.update({
   path: '/sprints/create/',
@@ -84,18 +82,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/categories/': {
       id: '/categories/'
       path: '/categories'
       fullPath: '/categories'
       preLoaderRoute: typeof CategoriesIndexLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/dashboard/': {
-      id: '/dashboard/'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/sprints/': {
@@ -140,8 +138,8 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
+  DashboardIndexRoute,
   CategoriesIndexLazyRoute,
-  DashboardIndexLazyRoute,
   SprintsIndexLazyRoute,
   SprintsSprintIdIndexRoute,
   SprintsCurrentIndexRoute,
@@ -158,8 +156,8 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/categories/",
         "/dashboard/",
+        "/categories/",
         "/sprints/",
         "/sprints/$sprintId/",
         "/sprints/current/",
@@ -170,11 +168,11 @@ export const routeTree = rootRoute.addChildren({
     "/": {
       "filePath": "index.tsx"
     },
+    "/dashboard/": {
+      "filePath": "dashboard/index.tsx"
+    },
     "/categories/": {
       "filePath": "categories/index.lazy.tsx"
-    },
-    "/dashboard/": {
-      "filePath": "dashboard/index.lazy.tsx"
     },
     "/sprints/": {
       "filePath": "sprints/index.lazy.tsx"
