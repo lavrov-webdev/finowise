@@ -23,7 +23,7 @@ export const Dashboard: React.FC = () => {
     getTransactionsQueryOptions({
       filters: {
         sprintId: search.sprintId,
-        categoryId: search.categoryId,
+        categoryId: search.categoryId,  
       }
     })
   );
@@ -34,7 +34,6 @@ export const Dashboard: React.FC = () => {
   const groupedTransactions = useMemo(() => {
     const bySprint = _.groupBy(transactions?.data, "sprintId");
     const byCategory = _.groupBy(transactions?.data, "category.id");
-    console.log({ byCategory })
     return { bySprint, byCategory };
   }, [transactions]);
 
@@ -114,8 +113,8 @@ export const Dashboard: React.FC = () => {
             <Text variant="body-2" color="secondary">
               Активные фильтры:
             </Text>
-
             <Flex gap={2} alignItems="center">
+
               {activeFilters.map((filter, index) => (
                 <Flex
                   key={`${filter.type}-${index}`}
@@ -160,14 +159,6 @@ export const Dashboard: React.FC = () => {
               onCategorySelect={handleCategoryClick}
             />
           </Card>
-        )}
-
-        {!showSprintsChart && !showCategoriesChart && (
-          <Flex alignItems="center" justifyContent="center" style={{ width: '100%', height: '100%' }}>
-            <Text variant="body-2" color="secondary">
-              Выберите данные для отображения, сбросив фильтры
-            </Text>
-          </Flex>
         )}
 
         {(showSprintsChart && Object.keys(groupedTransactions.bySprint).length === 0) ||

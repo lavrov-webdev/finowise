@@ -10,7 +10,7 @@ export const getCurrentSprintQueryKey = () => [CURRENT_SPRINT_QUERY_KEY];
 export const getSprintsQueryOptions = () =>
   queryOptions({
     queryKey: getSprintQueryKey(),
-    queryFn: sprintsControllerFindAll,
+    queryFn: () => sprintsControllerFindAll(),
   });
 
 export const getSprintByIdQueryOptions = (id?: number) =>
@@ -24,6 +24,6 @@ export const getSprintByIdQueryOptions = (id?: number) =>
 export const getCurrentSprintQueryOptions = () =>
   queryOptions({
     queryKey: getCurrentSprintQueryKey(),
-    queryFn: sprintsControllerFindCurrent,
+    queryFn: () => sprintsControllerFindCurrent(),
     staleTime: 1000 * 60,
   });
