@@ -1,5 +1,4 @@
 import { TransactionDetailedResponseDto } from '@generated';
-import { Flex } from "@gravity-ui/uikit";
 import { getCategoriesQueryOptions } from "@modules/Categories/api/queryOptions";
 import { formatAmount } from "@system/utils/formatAmount";
 import { useQuery } from "@tanstack/react-query";
@@ -21,13 +20,10 @@ interface DoughnutChartProps {
 
 export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, onClick, onCategorySelect }) => {
   const chartRef = useRef<ChartJS<"doughnut">>(null);
-  const categoriesQuery = useQuery(getCategoriesQueryOptions());
 
   const chartData = useMemo(() => {
     const categoryIds = Object.keys(data);
-    const categories = categoryIds.map(categoryId => 
-      categoriesQuery.data?.data?.find(category => category.id === +categoryId)?.name
-    );
+    const categories = categoryIds.map(categoryId => data[categoryId][0].category.name);
     const amounts = categoryIds.map(categoryId =>
       data[categoryId].reduce((acc, transaction) => acc + Math.abs(transaction.amount), 0)
     );
@@ -38,7 +34,7 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
         data: amounts,
       }]
     };
-  }, [data, categoriesQuery.data]);
+  }, [data]);
 
   const options = useMemo<ChartOptions<"doughnut">>(() => ({
     plugins: {
@@ -78,7 +74,6 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
   };
 
   return (
-    <Flex alignItems="center" justifyContent="center" style={{ width: '50%', maxHeight: "100%", cursor: 'pointer' }}>
     <Doughnut
       ref={chartRef}
       id='categories-doughnut'
@@ -86,6 +81,5 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
         onClick={handleClick}
         options={options}
       />
-    </Flex>
   );
 }; 

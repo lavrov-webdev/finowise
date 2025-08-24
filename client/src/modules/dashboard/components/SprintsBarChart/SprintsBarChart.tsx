@@ -7,7 +7,6 @@ import { getSprintsQueryOptions } from "@modules/Sprints/api/queryOptions";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { DATE_FORMAT } from "@system/consts";
-import { Flex } from "@gravity-ui/uikit";
 import { CHART_COLORS } from "@modules/dashboard/consts";
 import { formatAmount } from "@system/utils/formatAmount";
 
@@ -32,7 +31,7 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick, onSpri
 
   const chartData = useMemo<ChartData<"bar">>(() => {
     const sprintIds = Object.keys(data);
-    
+
     return {
       labels: sprintIds.map(sprintId => {
         const sprint = sprintsQuery.data?.data?.find(sprint => sprint.id === +sprintId);
@@ -41,8 +40,8 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick, onSpri
       datasets: [{
         label: "Sprints",
         backgroundColor: CHART_COLORS[0],
-        data: sprintIds.map(sprintId => 
-          data[sprintId].reduce((acc, transaction) => acc - transaction.amount, 0)
+        data: sprintIds.map(sprintId =>
+          data[sprintId].reduce((acc, transaction) => acc + transaction.amount, 0)
         ),
       }],
     };
@@ -62,25 +61,25 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick, onSpri
   };
 
   return (
-    <Flex alignItems="center" justifyContent="center" style={{ width: '50%', maxHeight: "100%" }}>
-      <Bar
-        options={{
-          plugins: {
-            tooltip: {
-              callbacks: {
-                label: function (context) {
-                  return ` ${formatAmount(context.raw as number)}`;
-                }
+    <Bar
+      options={{
+        indexAxis: 'y',
+        responsive: true,
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                return ` ${formatAmount(context.raw as number)}`;
               }
             }
           }
         }
-        }
-        ref={chartRef}
-        id='sprints-bar'
-        data={chartData}
-        onClick={handleClick}
-      />
-    </Flex>
+      }
+      }
+      ref={chartRef}
+      id='sprints-bar'
+      data={chartData}
+      onClick={handleClick}
+    />
   );
 }; 

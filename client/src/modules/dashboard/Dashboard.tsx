@@ -5,12 +5,15 @@ import _ from 'lodash';
 import React, { useMemo } from 'react';
 import { SprintsBarChart } from './components/SprintsBarChart';
 import { CategoriesDoughnutChart } from './components/CategoriesDoughnutChart';
-import { Button, Flex, Text, Icon, Label } from '@gravity-ui/uikit';
+import { Button, Flex, Text, Label } from '@gravity-ui/uikit';
 import { DashboardSearchParams } from '../../routes/dashboard';
 import { getSprintsQueryOptions } from '@modules/Sprints/api/queryOptions';
 import { getCategoriesQueryOptions } from '@modules/Categories/api/queryOptions';
 import dayjs from 'dayjs';
 import { DATE_FORMAT } from '@system/consts';
+import { TransactionsTable } from '@modules/Transactions';
+import styles from './Dashboard.module.scss';
+import { Card } from '@components/Card';
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -31,6 +34,7 @@ export const Dashboard: React.FC = () => {
   const groupedTransactions = useMemo(() => {
     const bySprint = _.groupBy(transactions?.data, "sprintId");
     const byCategory = _.groupBy(transactions?.data, "category.id");
+    console.log({ byCategory })
     return { bySprint, byCategory };
   }, [transactions]);
 
@@ -103,51 +107,59 @@ export const Dashboard: React.FC = () => {
   const hasActiveFilters = activeFilters.length > 0;
 
   return (
-    <div>
+    <div className={styles.content}>
       {hasActiveFilters && (
-        <Flex gap={3} alignItems="center" >
-          <Text variant="body-2" color="secondary">
-            Активные фильтры:
-          </Text>
+        <div className={styles.filters}>
+          <Flex gap={3} alignItems="center" spacing={{ mb: 5 }}>
+            <Text variant="body-2" color="secondary">
+              Активные фильтры:
+            </Text>
 
-          <Flex gap={2} alignItems="center">
-            {activeFilters.map((filter, index) => (
-              <Flex
-                key={`${filter.type}-${index}`}
-                gap={1}
-                alignItems="center"
+            <Flex gap={2} alignItems="center">
+              {activeFilters.map((filter, index) => (
+                <Flex
+                  key={`${filter.type}-${index}`}
+                  gap={1}
+                  alignItems="center"
+                >
+                  <Label type='close' onCloseClick={filter.onRemove}>
+                    {filter.label}
+                  </Label>
+                </Flex>
+              ))}
+            </Flex>
+
+            {activeFilters.length > 1 && (
+              <Button
+                view="outlined"
+                size="s"
+                onClick={handleResetFilters}
               >
-                <Label type='close' onCloseClick={filter.onRemove}>
-                  {filter.label}
-                </Label>
-              </Flex>
-            ))}
+                Сбросить все
+              </Button>
+            )}
           </Flex>
-
-          {activeFilters.length > 1 && (
-            <Button
-              view="outlined"
-              size="s"
-              onClick={handleResetFilters}
-            >
-              Сбросить все
-            </Button>
-          )}
-        </Flex>
+        </div>
       )}
 
-      <Flex height={500} gap={2} alignItems='center'>
+      <div className={styles.charts}>
         {showSprintsChart && Object.keys(groupedTransactions.bySprint).length > 0 && (
-          <SprintsBarChart
-            data={groupedTransactions.bySprint}
-            onSprintSelect={handleSprintClick}
-          />
+          <Card maxWidth={"none"} title='Спринты'>
+            <Flex style={{ height: '100%' }} alignItems='center'>
+              <SprintsBarChart
+                data={groupedTransactions.bySprint}
+                onSprintSelect={handleSprintClick}
+              />
+            </Flex>
+          </Card>
         )}
         {showCategoriesChart && Object.keys(groupedTransactions.byCategory).length > 0 && (
-          <CategoriesDoughnutChart
-            data={groupedTransactions.byCategory}
-            onCategorySelect={handleCategoryClick}
-          />
+          <Card maxWidth={"none"} title='Категории'>
+            <CategoriesDoughnutChart
+              data={groupedTransactions.byCategory}
+              onCategorySelect={handleCategoryClick}
+            />
+          </Card>
         )}
 
         {!showSprintsChart && !showCategoriesChart && (
@@ -166,28 +178,16 @@ export const Dashboard: React.FC = () => {
             </Text>
           </Flex>
         ) : null}
-      </Flex>
+      </div>
 
-      {Object.entries(groupedTransactions.bySprint).map(([sprintId, transactions]) => (
-        <div key={sprintId}>
-          <h1>{sprintId} sprint</h1>
-          {transactions.map((transaction) => (
-            <div key={transaction.id}>
-              <h1>{transaction.amount} {transaction.category.id}</h1>
-            </div>
-          ))}
-        </div>
-      ))}
-      {Object.entries(groupedTransactions.byCategory).map(([categoryId, transactions]) => (
-        <div key={categoryId}>
-          <h1>{categoryId} category</h1>
-          {transactions.map((transaction) => (
-            <div key={transaction.id}>
-              <h1>{transaction.amount} {transaction.category.id}</h1>
-            </div>
-          ))}
-        </div>
-      ))}
+      <div className={styles.transactions}>
+        <Card maxWidth={"100%"} title='Список транзакций'>
+          <TransactionsTable
+            transactions={transactions?.data || []}
+            width='max'
+          />
+        </Card>
+      </div>
     </div>
   );
 }; 
