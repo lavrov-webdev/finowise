@@ -1,11 +1,11 @@
+import { ChartDonut, CirclePlay, CirclePlus, ListTimeline, Plus, Tag } from "@gravity-ui/icons";
 import { MenuItem } from "@gravity-ui/navigation";
-import { Link } from "@tanstack/react-router";
-import styles from "../Aside.module.scss";
-import { useQuery } from "@tanstack/react-query";
-import { getCurrentSprintQueryOptions } from "@modules/Sprints";
-import { useMemo } from "react";
 import { Loader } from "@gravity-ui/uikit";
-import { CirclePlay, CirclePlus, ListTimeline, Plus, Tag } from "@gravity-ui/icons";
+import { getCurrentSprintQueryOptions } from "@modules/Sprints";
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
+import { useMemo } from "react";
+import styles from "../Aside.module.scss";
 
 export const useMenuItems = (): MenuItem[] => {
   const currentSprintIdState = useQuery(getCurrentSprintQueryOptions());
@@ -80,6 +80,18 @@ export const useMenuItems = (): MenuItem[] => {
           );
         },
         icon: Tag
+      },
+      {
+        id: "dashboard",
+        title: "Dashboard",
+        icon: ChartDonut,
+        itemWrapper(p, makeItem) {
+          return (
+            <Link className={styles.link} to="/dashboard">
+              {makeItem(p)}
+            </Link>
+          );
+        },
       },
     ],
     [currentSprintIdState],

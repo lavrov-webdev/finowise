@@ -1,5 +1,6 @@
 import {
   ThemeProvider,
+  Toaster,
   ToasterComponent,
   ToasterProvider,
 } from "@gravity-ui/uikit";
@@ -30,12 +31,14 @@ declare module "@tanstack/react-router" {
   }
 }
 
+const toaster = new Toaster();
+
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(
   <React.StrictMode>
     <ThemeProvider theme="light">
       <QueryProvider>
-        <ToasterProvider>
+        <ToasterProvider toaster={toaster}>
           <RouterProvider router={router} />
           <ToasterComponent />
         </ToasterProvider>

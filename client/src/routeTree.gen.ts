@@ -14,6 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as DashboardIndexImport } from './routes/dashboard/index'
 import { Route as TransactionsCreateIndexImport } from './routes/transactions/create/index'
 import { Route as SprintsCurrentIndexImport } from './routes/sprints/current/index'
 import { Route as SprintsSprintIdIndexImport } from './routes/sprints/$sprintId/index'
@@ -42,6 +43,11 @@ const CategoriesIndexLazyRoute = CategoriesIndexLazyImport.update({
 } as any).lazy(() =>
   import('./routes/categories/index.lazy').then((d) => d.Route),
 )
+
+const DashboardIndexRoute = DashboardIndexImport.update({
+  path: '/dashboard/',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const SprintsCreateIndexLazyRoute = SprintsCreateIndexLazyImport.update({
   path: '/sprints/create/',
@@ -74,6 +80,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardIndexImport
       parentRoute: typeof rootRoute
     }
     '/categories/': {
@@ -125,6 +138,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
+  DashboardIndexRoute,
   CategoriesIndexLazyRoute,
   SprintsIndexLazyRoute,
   SprintsSprintIdIndexRoute,
@@ -142,6 +156,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/dashboard/",
         "/categories/",
         "/sprints/",
         "/sprints/$sprintId/",
@@ -152,6 +167,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/dashboard/": {
+      "filePath": "dashboard/index.tsx"
     },
     "/categories/": {
       "filePath": "categories/index.lazy.tsx"

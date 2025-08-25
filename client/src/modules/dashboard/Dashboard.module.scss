@@ -1,0 +1,22 @@
+.content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr auto;
+  gap: 16px;
+  height: 100%;
+  min-height: 500px;
+}
+
+.filters {
+  grid-column: 1 / -1;
+}
+
+.charts {
+  display: contents;
+  min-height: 500px;
+}
+
+.transactions {
+  grid-column: 1 / -1;
+}
+
