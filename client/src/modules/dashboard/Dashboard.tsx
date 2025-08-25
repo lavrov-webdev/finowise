@@ -1,19 +1,19 @@
+import { Card } from '@components/Card';
+import { Button, Flex, Label, Text } from '@gravity-ui/uikit';
+import { getCategoriesQueryOptions } from '@modules/Categories/api/queryOptions';
+import { getSprintsQueryOptions } from '@modules/Sprints/api/queryOptions';
+import { TransactionsTable } from '@modules/Transactions';
 import { getTransactionsQueryOptions } from '@modules/Transactions/api/queryOptions';
+import { DATE_FORMAT } from '@system/consts';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';
+import dayjs from 'dayjs';
 import _ from 'lodash';
 import React, { useMemo } from 'react';
-import { SprintsBarChart } from './components/SprintsBarChart';
-import { CategoriesDoughnutChart } from './components/CategoriesDoughnutChart';
-import { Button, Flex, Text, Label } from '@gravity-ui/uikit';
 import { DashboardSearchParams } from '../../routes/dashboard';
-import { getSprintsQueryOptions } from '@modules/Sprints/api/queryOptions';
-import { getCategoriesQueryOptions } from '@modules/Categories/api/queryOptions';
-import dayjs from 'dayjs';
-import { DATE_FORMAT } from '@system/consts';
-import { TransactionsTable } from '@modules/Transactions';
+import { CategoriesDoughnutChart } from './components/CategoriesDoughnutChart';
+import { SprintsBarChart } from './components/SprintsBarChart';
 import styles from './Dashboard.module.scss';
-import { Card } from '@components/Card';
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();

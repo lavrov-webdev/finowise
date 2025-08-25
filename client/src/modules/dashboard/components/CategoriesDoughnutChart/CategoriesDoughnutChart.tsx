@@ -1,7 +1,5 @@
 import { TransactionDetailedResponseDto } from '@generated';
-import { getCategoriesQueryOptions } from "@modules/Categories/api/queryOptions";
 import { formatAmount } from "@system/utils/formatAmount";
-import { useQuery } from "@tanstack/react-query";
 import { ArcElement, Chart as ChartJS, ChartOptions, Legend, Tooltip } from "chart.js";
 import React, { MouseEventHandler, useMemo, useRef } from 'react';
 import { Doughnut, getElementAtEvent } from 'react-chartjs-2';

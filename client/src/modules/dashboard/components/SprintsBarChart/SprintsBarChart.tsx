@@ -1,14 +1,13 @@
+import { TransactionDetailedResponseDto } from '@generated';
+import { CHART_COLORS } from "@modules/dashboard/consts";
+import { getSprintsQueryOptions } from "@modules/Sprints/api/queryOptions";
+import { DATE_FORMAT } from "@system/consts";
+import { formatAmount } from "@system/utils/formatAmount";
+import { useQuery } from "@tanstack/react-query";
 import { BarElement, CategoryScale, ChartData, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from "chart.js";
-import _ from 'lodash';
+import dayjs from "dayjs";
 import React, { MouseEventHandler, useMemo, useRef } from 'react';
 import { Bar, getElementAtEvent } from 'react-chartjs-2';
-import { TransactionDetailedResponseDto } from '@generated';
-import { getSprintsQueryOptions } from "@modules/Sprints/api/queryOptions";
-import { useQuery } from "@tanstack/react-query";
-import dayjs from "dayjs";
-import { DATE_FORMAT } from "@system/consts";
-import { CHART_COLORS } from "@modules/dashboard/consts";
-import { formatAmount } from "@system/utils/formatAmount";
 
 ChartJS.register(
   CategoryScale,
