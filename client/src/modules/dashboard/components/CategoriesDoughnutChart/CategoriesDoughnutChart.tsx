@@ -1,27 +1,27 @@
-import { TransactionDetailedResponseDto } from '@generated';
+import { CategoryReportResponseDto } from '@generated';
 import { formatAmount } from "@system/utils/formatAmount";
 import React, { MouseEventHandler, useMemo } from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 interface DoughnutChartProps {
-  data: Record<string, TransactionDetailedResponseDto[]>;
+  data: CategoryReportResponseDto[];
   onClick?: MouseEventHandler<HTMLCanvasElement>;
   onCategorySelect?: (categoryId: number) => void;
 }
 
 export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, onClick: _onClick, onCategorySelect }) => {
   const chartData = useMemo(() => {
-    const categoryIds = Object.keys(data);
-    return categoryIds.map(categoryId => {
-      const category = data[categoryId][0].category;
-      const amount = data[categoryId].reduce((acc, transaction) => acc + Math.abs(transaction.amount), 0);
-      return {
-        id: +categoryId,
-        name: category.name,
-        value: amount,
-        categoryId: +categoryId
-      };
-    });
+    return data.reduce((acc, category) => {
+      if (category.totalSpend !== 0) {
+        acc.push({
+          id: category.id,
+          name: category.name,
+          value: -category.totalSpend,
+          categoryId: category.id
+        });
+      }
+      return acc;
+    }, [] as { id: number; name: string; value: number; categoryId: number }[]);
   }, [data]);
 
   const total = useMemo(() => 
@@ -55,6 +55,8 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
 
+  console.log(chartData, "chartData", total, "total")
+  
   return (
     <ResponsiveContainer width="100%" height={400}>
       <PieChart>

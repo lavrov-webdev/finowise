@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Dashboard as DashboardComponent } from "../../modules/dashboard";
+import { Dashboard as DashboardComponent } from "../../modules/Dashboard";
 import { z } from "zod";
 
 const dashboardSearchSchema = z.object({

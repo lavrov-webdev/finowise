@@ -17,3 +17,8 @@ export class CategoryResponseDto extends CreateCategoryDto {
   @ApiProperty({example: true})
   isActive: boolean;
 }
+
+export class CategoryReportResponseDto extends CategoryResponseDto {
+  @ApiProperty({ example: 2000 })
+  totalSpend: number;
+}

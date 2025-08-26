@@ -1,36 +1,25 @@
-import { TransactionDetailedResponseDto } from '@generated';
-import { CHART_COLORS } from "@modules/dashboard/consts";
-import { getSprintsQueryOptions } from "@modules/Sprints/api/queryOptions";
+import { SprintReportResponseDto } from '@generated';
+import { CHART_COLORS } from "@modules/Dashboard/consts";
 import { DATE_FORMAT } from "@system/consts";
 import { formatAmount } from "@system/utils/formatAmount";
-import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import React, { MouseEventHandler, useMemo } from 'react';
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
 interface BarChartProps {
-  data: Record<string, TransactionDetailedResponseDto[]>;
+  data: SprintReportResponseDto[];
   onClick?: MouseEventHandler<HTMLCanvasElement>;
   onSprintSelect?: (sprintId: number) => void;
 }
 
 export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick: _onClick, onSprintSelect }) => {
-  const sprintsQuery = useQuery(getSprintsQueryOptions());
-
   const chartData = useMemo(() => {
-    const sprintIds = Object.keys(data);
-
-    return sprintIds.map(sprintId => {
-      const sprint = sprintsQuery.data?.data?.find(sprint => sprint.id === +sprintId);
-      const amount = data[sprintId].reduce((acc, transaction) => acc + transaction.amount, 0);
-      
-      return {
-        sprintId: +sprintId,
-        name: sprint ? `${dayjs(sprint.startDate).format(DATE_FORMAT)} - ${dayjs(sprint.endDate).format(DATE_FORMAT)}` : sprintId,
-        amount: amount
-      };
-    });
-  }, [data, sprintsQuery.data]);
+    return data.map(sprint => ({
+      sprintId: sprint.id,
+      name: `${dayjs(sprint.startDate).format(DATE_FORMAT)} - ${dayjs(sprint.endDate).format(DATE_FORMAT)}`,
+      amount: sprint.totalSpend
+    }));
+  }, [data]);
 
   const handleClick = (data: any) => {
     let sprintId: number | undefined;

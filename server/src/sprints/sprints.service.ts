@@ -4,7 +4,6 @@ import { UpdateSprintDto } from './dto/update-sprint.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { EnvelopesService } from 'src/envelopes/envelopes.service';
 import { Prisma } from '@prisma/client';
-import { SprintDetailedResponseDto } from './dto/sprint.response.dto';
 
 @Injectable()
 export class SprintsService {
