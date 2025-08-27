@@ -17,7 +17,7 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick: _onCli
     return data.map(sprint => ({
       sprintId: sprint.id,
       name: formatSprintName(sprint.startDate, sprint.endDate),
-      amount: -sprint.totalSpend,
+      amount: sprint.totalSpend,
       fill: selectedSprintId === undefined 
         ? CHART_COLORS[0] 
         : sprint.id === selectedSprintId 

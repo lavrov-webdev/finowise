@@ -14,7 +14,7 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
   const chartData = useMemo(() => data.map(category => ({
     id: category.id,
     name: category.name,
-    value: -category.totalSpend,
+    value: category.totalSpend,
     categoryId: category.id
   })), [data]);
 
