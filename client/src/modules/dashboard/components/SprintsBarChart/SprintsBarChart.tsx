@@ -18,7 +18,7 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick: _onCli
     return data.map(sprint => ({
       sprintId: sprint.id,
       name: `${dayjs(sprint.startDate).format(DATE_FORMAT)} - ${dayjs(sprint.endDate).format(DATE_FORMAT)}`,
-      amount: sprint.totalSpend,
+      amount: -sprint.totalSpend,
       fill: selectedSprintId === undefined 
         ? CHART_COLORS[0] 
         : sprint.id === selectedSprintId 
@@ -72,22 +72,23 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick: _onCli
       <BarChart
         data={chartData}
         style={{ cursor: 'pointer' }}
-        layout="vertical"
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis 
-          type="number" 
-          tickFormatter={(value: number) => formatAmount(value)}
-        />
-        <YAxis 
           type="category" 
           dataKey="name" 
-          width={120}
+          angle={-45}
+          textAnchor="end"
+          height={100}
+        />
+        <YAxis 
+          type="number" 
+          tickFormatter={(value: number) => formatAmount(value)}
         />
         <Tooltip content={<CustomTooltip />} cursor={{fill: 'transparent'}} />
         <Bar 
           dataKey="amount" 
-          radius={[0, 4, 4, 0]}
+          radius={[4, 4, 0, 0]}
           onClick={handleClick}
           onMouseDown={handleClick}
         >
