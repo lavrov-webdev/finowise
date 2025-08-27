@@ -11,22 +11,15 @@ interface DoughnutChartProps {
 }
 
 export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, onClick: _onClick, onCategorySelect, selectedCategoryId }) => {
-  const chartData = useMemo(() => {
-    return data.reduce((acc, category) => {
-      if (category.totalSpend !== 0) {
-        acc.push({
-          id: category.id,
-          name: category.name,
-          value: -category.totalSpend,
-          categoryId: category.id
-        });
-      }
-      return acc;
-    }, [] as { id: number; name: string; value: number; categoryId: number }[]);
-  }, [data]);
+  const chartData = useMemo(() => data.map(category => ({
+    id: category.id,
+    name: category.name,
+    value: -category.totalSpend,
+    categoryId: category.id
+  })), [data]);
 
-  const total = useMemo(() => 
-    chartData.reduce((sum, item) => sum + item.value, 0), 
+  const total = useMemo(() =>
+    chartData.reduce((sum, item) => sum + item.value, 0),
     [chartData]
   );
 
@@ -61,11 +54,11 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
     if (selectedCategoryId === undefined) {
       return COLORS[index % COLORS.length];
     }
-    
+
     if (entry.categoryId === selectedCategoryId) {
       return COLORS[index % COLORS.length];
     }
-    
+
     return GRAY_COLOR;
   };
 
@@ -84,7 +77,7 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
   };
 
   console.log(chartData, "chartData", total, "total")
-  
+
   return (
     <ResponsiveContainer width="100%" height={400}>
       <PieChart>
@@ -100,8 +93,8 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
           style={{ cursor: 'pointer' }}
         >
           {chartData.map((entry, index) => (
-            <Cell 
-              key={`cell-${index}`} 
+            <Cell
+              key={`cell-${index}`}
               fill={getCellColor(entry, index)}
               stroke={getCellStroke(entry)}
               strokeWidth={getCellStrokeWidth(entry)}
@@ -109,8 +102,8 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
           ))}
         </Pie>
         <Tooltip content={<CustomTooltip />} />
-        <Legend 
-          verticalAlign="bottom" 
+        <Legend
+          verticalAlign="bottom"
           height={36}
           formatter={(value: string, _entry: any) => (
             <span style={{ color: '#333' }}>{value}</span>

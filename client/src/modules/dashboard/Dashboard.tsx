@@ -1,5 +1,5 @@
 import { Card } from '@components/Card';
-import { Button, Flex, Label, Text } from '@gravity-ui/uikit';
+import { Button, Flex, Select, Text } from '@gravity-ui/uikit';
 import { TransactionsTable } from '@modules/Transactions';
 import { getTransactionsQueryOptions } from '@modules/Transactions/api/queryOptions';
 import { formatSprintName } from '@system/utils/formatSprintName';
@@ -59,85 +59,77 @@ export const Dashboard: React.FC = () => {
     });
   };
 
-  const handleRemoveSprintFilter = () => {
+
+
+  const handleSprintSelectChange = (value: string[]) => {
+    const sprintId = value.length > 0 ? Number(value[0]) : undefined;
     navigate({
       to: '/dashboard',
-      search: { ...search, sprintId: undefined },
+      search: { ...search, sprintId },
     });
   };
 
-  const handleRemoveCategoryFilter = () => {
+  const handleCategorySelectChange = (value: string[]) => {
+    const categoryId = value.length > 0 ? Number(value[0]) : undefined;
     navigate({
       to: '/dashboard',
-      search: { ...search, categoryId: undefined },
+      search: { ...search, categoryId },
     });
   };
 
-  const activeFilters = useMemo(() => {
-    const filters = [];
+  const hasActiveFilters = search.sprintId || search.categoryId;
 
-    if (search.sprintId && reportData) {
-      const sprint = reportData.sprints?.items?.find(s => s.id === search.sprintId);
-      if (sprint) {
-        filters.push({
-          type: 'sprint',
-          label: `Спринт: ${formatSprintName(sprint.startDate, sprint.endDate)}`,
-          onRemove: handleRemoveSprintFilter,
-        });
-      }
-    }
+  const sprintOptions = useMemo(() => {
+    if (!reportData?.sprints?.items) return [];
+    return reportData.sprints.items.map(sprint => ({
+      value: sprint.id.toString(),
+      content: formatSprintName(sprint.startDate, sprint.endDate)
+    }))
+  }, [reportData?.sprints?.items]);
 
-    if (search.categoryId && reportData) {
-      const category = reportData.categories?.items?.find(c => c.id === search.categoryId);
-      if (category) {
-        filters.push({
-          type: 'category',
-          label: `Категория: ${category.name}`,
-          onRemove: handleRemoveCategoryFilter,
-        });
-      }
-    }
-
-    return filters;
-  }, [search, reportData]);
-
-  const hasActiveFilters = activeFilters.length > 0;
+  const categoryOptions = useMemo(() => {
+    if (!reportData?.categories?.items) return [];
+    return reportData.categories.items.map(category => ({
+      value: category.id.toString(),
+      content: category.name
+    }))
+  }, [reportData?.categories?.items]);
 
   return (
     <div className={styles.content}>
-      {hasActiveFilters && (
-        <div className={styles.filters}>
-          <Flex gap={3} alignItems="center" spacing={{ mb: 5 }}>
-            <Text variant="body-2" color="secondary">
-              Активные фильтры:
-            </Text>
-            <Flex gap={2} alignItems="center">
-
-              {activeFilters.map((filter, index) => (
-                <Flex
-                  key={`${filter.type}-${index}`}
-                  gap={1}
-                  alignItems="center"
-                >
-                  <Label type='close' onCloseClick={filter.onRemove}>
-                    {filter.label}
-                  </Label>
-                </Flex>
-              ))}
-            </Flex>
-
-            {activeFilters.length > 1 && (
+      <div className={styles.filters}>
+        <Flex gap={3} alignItems="center" spacing={{ mb: 5 }}>
+          <Text variant="body-2" color="secondary">
+            Фильтры:
+          </Text>
+          <Flex gap={2} alignItems="center">
+            <Select
+              placeholder="Выберите спринт"
+              options={sprintOptions}
+              value={search.sprintId ? [search.sprintId.toString()] : []}
+              onUpdate={handleSprintSelectChange}
+              width={200}
+              hasClear
+            />
+            <Select
+              placeholder="Выберите категорию"
+              options={categoryOptions}
+              value={search.categoryId ? [search.categoryId.toString()] : []}
+              onUpdate={handleCategorySelectChange}
+              width={200}
+              hasClear
+            />
+            {hasActiveFilters && (
               <Button
                 view="outlined"
-                size="s"
                 onClick={handleResetFilters}
               >
                 Сбросить все
               </Button>
             )}
           </Flex>
-        </div>
-      )}
+        </Flex>
+      </div>
 
       <div className={styles.charts}>
 
