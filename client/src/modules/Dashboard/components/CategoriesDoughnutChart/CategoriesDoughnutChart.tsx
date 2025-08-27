@@ -2,6 +2,8 @@ import { CategoryReportResponseDto } from '@generated';
 import { formatAmount } from "@system/utils/formatAmount";
 import React, { MouseEventHandler, useMemo } from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import { COLORS, GRAY_COLOR } from './const';
+import styles from './CategoriesDoughnutChart.module.scss';
 
 interface DoughnutChartProps {
   data: CategoryReportResponseDto[];
@@ -32,23 +34,14 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
       const data = payload[0].payload;
       const percentage = ((data.value / total) * 100).toFixed(1);
       return (
-        <div style={{
-          backgroundColor: 'white',
-          border: '1px solid #ccc',
-          borderRadius: '4px',
-          padding: '8px',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-        }}>
-          <p style={{ margin: '0 0 4px 0', fontWeight: 'bold' }}>{data.name}</p>
-          <p style={{ margin: '0' }}>{formatAmount(data.value)} ({percentage}%)</p>
+        <div className={styles.tooltip}>
+          <p className={styles.tooltipTitle}>{data.name}</p>
+          <p className={styles.tooltipContent}>{formatAmount(data.value)} ({percentage}%)</p>
         </div>
       );
     }
     return null;
   };
-
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
-  const GRAY_COLOR = '#D3D3D3';
 
   const getCellColor = (entry: any, index: number) => {
     if (selectedCategoryId === undefined) {
@@ -76,8 +69,6 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
     return 0;
   };
 
-  console.log(chartData, "chartData", total, "total")
-
   return (
     <ResponsiveContainer width="100%" height={350}>
       <PieChart>
@@ -90,11 +81,11 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
           paddingAngle={5}
           dataKey="value"
           onClick={handleClick}
-          style={{ cursor: 'pointer' }}
+          className={styles.pieChart}
         >
           {chartData.map((entry, index) => (
             <Cell
-              key={`cell-${index}`}
+              key={`cell-${entry.id}`}
               fill={getCellColor(entry, index)}
               stroke={getCellStroke(entry)}
               strokeWidth={getCellStrokeWidth(entry)}
@@ -106,7 +97,7 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
           verticalAlign="bottom"
           height={36}
           formatter={(value: string, _entry: any) => (
-            <span style={{ color: '#333' }}>{value}</span>
+            <span className={styles.legendText}>{value}</span>
           )}
         />
       </PieChart>
