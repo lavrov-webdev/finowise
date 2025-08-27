@@ -84,7 +84,7 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick: _onCli
           dataKey="name" 
           width={120}
         />
-        <Tooltip content={<CustomTooltip />} />
+        <Tooltip content={<CustomTooltip />} cursor={{fill: 'transparent'}} />
         <Bar 
           dataKey="amount" 
           radius={[0, 4, 4, 0]}
