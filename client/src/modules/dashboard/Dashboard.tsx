@@ -34,14 +34,20 @@ export const Dashboard: React.FC = () => {
   const handleSprintClick = (sprintId: number) => {
     navigate({
       to: '/dashboard',
-      search: { ...search, sprintId },
+      search: { 
+        ...search, 
+        sprintId: search.sprintId === sprintId ? undefined : sprintId 
+      },
     });
   };
 
   const handleCategoryClick = (categoryId: number) => {
     navigate({
       to: '/dashboard',
-      search: { ...search, categoryId },
+      search: { 
+        ...search, 
+        categoryId: search.categoryId === categoryId ? undefined : categoryId 
+      },
     });
   };
 
