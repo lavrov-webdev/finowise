@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import React, { useMemo } from "react";
 import styles from "./SprintsList.module.scss";
-import { fomratSprintsDates } from "./utils/fomratSprintsDates";
+import { formatSprintName } from "@system/utils/formatSprintName";
 import { groupSprintsByStartYear } from "./utils/groupSprintsByStartYear";
 import { ListSkeleton } from "./ListSkeleton";
 import { Link } from "@tanstack/react-router";
@@ -44,8 +44,7 @@ export const SprintsList = () => {
                 params={{ sprintId: sprint.id.toString() }}
               >
                 <GUICard className={styles.sprintsItemCard}>
-                  {fomratSprintsDates(sprint.startDate)}-
-                  {fomratSprintsDates(sprint.endDate)}
+                  {formatSprintName(sprint.startDate, sprint.endDate)}
                 </GUICard>
               </Link>
             ))}

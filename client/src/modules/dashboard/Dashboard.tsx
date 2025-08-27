@@ -2,10 +2,9 @@ import { Card } from '@components/Card';
 import { Button, Flex, Label, Text } from '@gravity-ui/uikit';
 import { TransactionsTable } from '@modules/Transactions';
 import { getTransactionsQueryOptions } from '@modules/Transactions/api/queryOptions';
-import { DATE_FORMAT } from '@system/consts';
+import { formatSprintName } from '@system/utils/formatSprintName';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import dayjs from 'dayjs';
 import React, { useMemo } from 'react';
 import { DashboardSearchParams } from '../../routes/dashboard';
 import { useGetReport } from './api';
@@ -23,10 +22,12 @@ export const Dashboard: React.FC = () => {
         sprintId: search.sprintId,
         categoryId: search.categoryId,
       }
+    }, {
+      keepPrevious: true
     })
   );
 
-  const { data: reportData,  } = useGetReport({
+  const { data: reportData, } = useGetReport({
     sprintId: search.sprintId,
     categoryId: search.categoryId
   });
@@ -34,9 +35,9 @@ export const Dashboard: React.FC = () => {
   const handleSprintClick = (sprintId: number) => {
     navigate({
       to: '/dashboard',
-      search: { 
-        ...search, 
-        sprintId: search.sprintId === sprintId ? undefined : sprintId 
+      search: {
+        ...search,
+        sprintId: search.sprintId === sprintId ? undefined : sprintId
       },
     });
   };
@@ -44,9 +45,9 @@ export const Dashboard: React.FC = () => {
   const handleCategoryClick = (categoryId: number) => {
     navigate({
       to: '/dashboard',
-      search: { 
-        ...search, 
-        categoryId: search.categoryId === categoryId ? undefined : categoryId 
+      search: {
+        ...search,
+        categoryId: search.categoryId === categoryId ? undefined : categoryId
       },
     });
   };
@@ -80,7 +81,7 @@ export const Dashboard: React.FC = () => {
       if (sprint) {
         filters.push({
           type: 'sprint',
-          label: `Спринт: ${dayjs(sprint.startDate).format(DATE_FORMAT)} - ${dayjs(sprint.endDate).format(DATE_FORMAT)}`,
+          label: `Спринт: ${formatSprintName(sprint.startDate, sprint.endDate)}`,
           onRemove: handleRemoveSprintFilter,
         });
       }

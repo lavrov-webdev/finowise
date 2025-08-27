@@ -1,8 +1,7 @@
 import { SprintReportResponseDto } from '@generated';
 import { CHART_COLORS } from "@modules/Dashboard/consts";
-import { DATE_FORMAT } from "@system/consts";
 import { formatAmount } from "@system/utils/formatAmount";
-import dayjs from "dayjs";
+import { formatSprintName } from "@system/utils/formatSprintName";
 import React, { MouseEventHandler, useMemo } from 'react';
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid, Cell } from 'recharts';
 
@@ -17,7 +16,7 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick: _onCli
   const chartData = useMemo(() => {
     return data.map(sprint => ({
       sprintId: sprint.id,
-      name: `${dayjs(sprint.startDate).format(DATE_FORMAT)} - ${dayjs(sprint.endDate).format(DATE_FORMAT)}`,
+      name: formatSprintName(sprint.startDate, sprint.endDate),
       amount: -sprint.totalSpend,
       fill: selectedSprintId === undefined 
         ? CHART_COLORS[0] 
