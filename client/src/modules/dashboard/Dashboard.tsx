@@ -26,7 +26,10 @@ export const Dashboard: React.FC = () => {
     })
   );
 
-  const { data: reportData } = useGetReport();
+  const { data: reportData,  } = useGetReport({
+    sprintId: search.sprintId,
+    categoryId: search.categoryId
+  });
 
   const handleSprintClick = (sprintId: number) => {
     navigate({

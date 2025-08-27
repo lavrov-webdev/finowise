@@ -8,7 +8,7 @@ export class ReportService {
         private readonly prisma: PrismaService,
     ) { }
 
-    async find(userId: number): Promise<ReportResponseDto> {
+    async find(userId: number, sprintId?: number, categoryId?: number): Promise<ReportResponseDto> {
         const [sprintsWithTransactions, categoriesWithTransactions, totalSpend] = await Promise.all([
             this.prisma.sprint.findMany({
                 where: {
@@ -16,6 +16,9 @@ export class ReportService {
                 },
                 include: {
                     transactions: {
+                        where: {
+                            categoryId
+                        },
                         select: {
                             amount: true
                         }
@@ -28,6 +31,9 @@ export class ReportService {
                 },
                 include: {
                     transactions: {
+                        where: {
+                            sprintId
+                        },
                         select: {
                             amount: true
                         }

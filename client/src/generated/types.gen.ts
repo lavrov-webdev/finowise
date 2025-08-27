@@ -435,6 +435,19 @@ export type TransactionsControllerRemoveResponse = (TransactionResponseDto);
 
 export type TransactionsControllerRemoveError = (unknown);
 
+export type ReportControllerFindData = {
+    query?: {
+        /**
+         * Filter by category ID
+         */
+        categoryId?: number;
+        /**
+         * Filter by sprint ID
+         */
+        sprintId?: number;
+    };
+};
+
 export type ReportControllerFindResponse = (ReportResponseDto);
 
 export type ReportControllerFindError = (unknown);

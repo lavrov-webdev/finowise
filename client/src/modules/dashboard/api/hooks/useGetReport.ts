@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { getReportQueryOptions } from "../queryOptions";
+import { getReportQueryOptions, ReportQueryKeyParams } from "../queryOptions";
 
-export const useGetReport = () => {
-  return useQuery(getReportQueryOptions());
+export const useGetReport = (params?: ReportQueryKeyParams) => {
+  return useQuery(getReportQueryOptions(params));
 };

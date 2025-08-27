@@ -1,7 +1,7 @@
-import { Controller, Get, Request } from '@nestjs/common';
+import { Controller, Get, Query, Request } from '@nestjs/common';
 import { ApiCookieAuth, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { RequestWithUser } from 'src/interfaces';
-import { ReportResponseDto } from './dto/report.response.dto';
+import { ReportFilterDto, ReportResponseDto } from './dto/report.response.dto';
 import { ReportService } from './report.service';
 
 @ApiTags('report')
@@ -14,7 +14,10 @@ export class ReportController {
 
   @Get()
   @ApiOkResponse({ type: ReportResponseDto })
-  find(@Request() req: RequestWithUser) {
-    return this.reportService.find(req.user.id);
+  find(
+    @Request() req: RequestWithUser,
+    @Query() filterDto: ReportFilterDto,
+  ) {
+    return this.reportService.find(req.user.id, filterDto.sprintId, filterDto.categoryId);
   }
 }

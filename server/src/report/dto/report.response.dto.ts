@@ -1,6 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { SprintReportResponseDto } from "src/sprints/dto/sprint.response.dto";
 import { CategoryReportResponseDto } from "src/categories/dto/category.response.dto";
+import { IsInt, IsOptional, Min } from "class-validator";
+import { Type } from "class-transformer";
 
 
 class SprintsWrapper {
@@ -58,4 +60,20 @@ export class ReportResponseDto {
     @ApiProperty()
     totalSpend: number;
 
+}
+
+export class ReportFilterDto {
+    @ApiProperty({ example: 1, required: false, description: 'Filter by sprint ID' })
+    @IsOptional()
+    @IsInt()
+    @Min(1)
+    @Type(() => Number)
+    sprintId?: number;  
+
+    @ApiProperty({ example: 1, required: false, description: 'Filter by category ID' })
+    @IsOptional()
+    @IsInt()
+    @Min(1)
+    @Type(() => Number)
+    categoryId?: number;
 }
