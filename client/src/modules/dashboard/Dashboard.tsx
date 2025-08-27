@@ -145,6 +145,7 @@ export const Dashboard: React.FC = () => {
 
         <Card maxWidth={"none"} title='Категории'>
           <CategoriesDoughnutChart
+            selectedCategoryId={search.categoryId}
             data={reportData?.categories?.items || []}
             onCategorySelect={handleCategoryClick}
           />

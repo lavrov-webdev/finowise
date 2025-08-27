@@ -7,9 +7,10 @@ interface DoughnutChartProps {
   data: CategoryReportResponseDto[];
   onClick?: MouseEventHandler<HTMLCanvasElement>;
   onCategorySelect?: (categoryId: number) => void;
+  selectedCategoryId?: number;
 }
 
-export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, onClick: _onClick, onCategorySelect }) => {
+export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, onClick: _onClick, onCategorySelect, selectedCategoryId }) => {
   const chartData = useMemo(() => {
     return data.reduce((acc, category) => {
       if (category.totalSpend !== 0) {
@@ -54,6 +55,33 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
   };
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
+  const GRAY_COLOR = '#D3D3D3';
+
+  const getCellColor = (entry: any, index: number) => {
+    if (selectedCategoryId === undefined) {
+      return COLORS[index % COLORS.length];
+    }
+    
+    if (entry.categoryId === selectedCategoryId) {
+      return COLORS[index % COLORS.length];
+    }
+    
+    return GRAY_COLOR;
+  };
+
+  const getCellStroke = (entry: any) => {
+    if (selectedCategoryId !== undefined && entry.categoryId === selectedCategoryId) {
+      return '#333';
+    }
+    return 'none';
+  };
+
+  const getCellStrokeWidth = (entry: any) => {
+    if (selectedCategoryId !== undefined && entry.categoryId === selectedCategoryId) {
+      return 3;
+    }
+    return 0;
+  };
 
   console.log(chartData, "chartData", total, "total")
   
@@ -71,8 +99,13 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
           onClick={handleClick}
           style={{ cursor: 'pointer' }}
         >
-          {chartData.map((_entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          {chartData.map((entry, index) => (
+            <Cell 
+              key={`cell-${index}`} 
+              fill={getCellColor(entry, index)}
+              stroke={getCellStroke(entry)}
+              strokeWidth={getCellStrokeWidth(entry)}
+            />
           ))}
         </Pie>
         <Tooltip content={<CustomTooltip />} />
