@@ -1,84 +1,106 @@
-import { TransactionDetailedResponseDto } from '@generated';
-import { CHART_COLORS } from "@modules/dashboard/consts";
-import { getSprintsQueryOptions } from "@modules/Sprints/api/queryOptions";
-import { DATE_FORMAT } from "@system/consts";
+import { SprintReportResponseDto } from '@generated';
+import { CHART_COLORS } from "@modules/Dashboard/consts";
 import { formatAmount } from "@system/utils/formatAmount";
-import { useQuery } from "@tanstack/react-query";
-import { BarElement, CategoryScale, ChartData, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from "chart.js";
-import dayjs from "dayjs";
-import React, { MouseEventHandler, useMemo, useRef } from 'react';
-import { Bar, getElementAtEvent } from 'react-chartjs-2';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+import { formatSprintName } from "@system/utils/formatSprintName";
+import React, { MouseEventHandler, useMemo } from 'react';
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid, Cell } from 'recharts';
 
 interface BarChartProps {
-  data: Record<string, TransactionDetailedResponseDto[]>;
+  data: SprintReportResponseDto[];
   onClick?: MouseEventHandler<HTMLCanvasElement>;
   onSprintSelect?: (sprintId: number) => void;
+  selectedSprintId?: number;
 }
 
-export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick, onSprintSelect }) => {
-  const chartRef = useRef<ChartJS<"bar">>(null);
-  const sprintsQuery = useQuery(getSprintsQueryOptions());
+export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick: _onClick, onSprintSelect, selectedSprintId }) => {
+  const chartData = useMemo(() => {
+    return data.map(sprint => ({
+      sprintId: sprint.id,
+      name: formatSprintName(sprint.startDate, sprint.endDate),
+      amount: -sprint.totalSpend,
+      fill: selectedSprintId === undefined 
+        ? CHART_COLORS[0] 
+        : sprint.id === selectedSprintId 
+          ? CHART_COLORS[0] 
+          : '#D3D3D3',
+      stroke: selectedSprintId !== undefined && sprint.id === selectedSprintId ? '#333' : 'none',
+      strokeWidth: selectedSprintId !== undefined && sprint.id === selectedSprintId ? 2 : 0
+    }));
+  }, [data, selectedSprintId]);
 
-  const chartData = useMemo<ChartData<"bar">>(() => {
-    const sprintIds = Object.keys(data);
-
-    return {
-      labels: sprintIds.map(sprintId => {
-        const sprint = sprintsQuery.data?.data?.find(sprint => sprint.id === +sprintId);
-        return `${dayjs(sprint?.startDate).format(DATE_FORMAT)} - ${dayjs(sprint?.endDate).format(DATE_FORMAT)}`;
-      }),
-      datasets: [{
-        label: "Sprints",
-        backgroundColor: CHART_COLORS[0],
-        data: sprintIds.map(sprintId =>
-          data[sprintId].reduce((acc, transaction) => acc + transaction.amount, 0)
-        ),
-      }],
-    };
-  }, [data, sprintsQuery.data]);
-
-  const handleClick: MouseEventHandler<HTMLCanvasElement> = (event) => {
-    if (chartRef.current) {
-      const elements = getElementAtEvent(chartRef.current, event);
-      if (elements.length > 0) {
-        const elementIndex = elements[0].index;
-        const sprintIds = Object.keys(data);
-        const sprintId = +sprintIds[elementIndex];
-        onSprintSelect?.(sprintId);
+  const handleClick = (data: any) => {
+    let sprintId: number | undefined;
+    
+    if (data && typeof data === 'object') {
+      if (data.sprintId !== undefined) {
+        sprintId = +data.sprintId;
+      } else if (data.payload && data.payload.sprintId !== undefined) {
+        sprintId = +data.payload.sprintId;
+      } else if (data.activePayload && data.activePayload[0] && data.activePayload[0].payload) {
+        sprintId = +data.activePayload[0].payload.sprintId;
       }
     }
-    onClick?.(event);
+    
+    if (sprintId && !isNaN(sprintId)) {
+      onSprintSelect?.(sprintId);
+    }
+  };
+
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div style={{
+          backgroundColor: 'white',
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          padding: '8px',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+        }}>
+          <p style={{ margin: '0 0 4px 0', fontWeight: 'bold' }}>{label}</p>
+          <p style={{ margin: '0', color: CHART_COLORS[0] }}>
+            {formatAmount(payload[0].value)}
+          </p>
+        </div>
+      );
+    }
+    return null;
   };
 
   return (
-    <Bar
-      options={{
-        indexAxis: 'y',
-        responsive: true,
-        plugins: {
-          tooltip: {
-            callbacks: {
-              label: function (context) {
-                return ` ${formatAmount(context.raw as number)}`;
-              }
-            }
-          }
-        }
-      }
-      }
-      ref={chartRef}
-      id='sprints-bar'
-      data={chartData}
-      onClick={handleClick}
-    />
+    <ResponsiveContainer width="100%" height={400}>
+      <BarChart
+        data={chartData}
+        style={{ cursor: 'pointer' }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis 
+          type="category" 
+          dataKey="name" 
+          angle={-45}
+          textAnchor="end"
+          height={100}
+        />
+        <YAxis 
+          type="number" 
+          tickFormatter={(value: number) => formatAmount(value)}
+        />
+        <Tooltip content={<CustomTooltip />} cursor={{fill: 'transparent'}} />
+        <Bar 
+          dataKey="amount" 
+          radius={[4, 4, 0, 0]}
+          onClick={handleClick}
+          onMouseDown={handleClick}
+        >
+          {chartData.map((entry, index) => (
+            <Cell 
+              key={`cell-${index}`} 
+              fill={entry.fill}
+              stroke={entry.stroke}
+              strokeWidth={entry.strokeWidth}
+            />
+          ))}
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
   );
 }; 

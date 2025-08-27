@@ -10,6 +10,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { LoggerMiddleware } from './middlewares/logger';
+import { ReportModule } from './report/report.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { LoggerMiddleware } from './middlewares/logger';
     EnvelopesModule,
     TransactionsModule,
     PrismaModule,
+    ReportModule,
   ],
   providers: [
     {

@@ -15,6 +15,7 @@ import { routeTree } from "./routeTree.gen";
 import "./styles.scss";
 import "./zodConfig";
 import './system/axiosConfig'
+import 'dayjs/locale/ru';
 
 declare global {
   namespace NodeJS {

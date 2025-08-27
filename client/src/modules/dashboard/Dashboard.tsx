@@ -1,16 +1,13 @@
 import { Card } from '@components/Card';
-import { Button, Flex, Label, Text } from '@gravity-ui/uikit';
-import { getCategoriesQueryOptions } from '@modules/Categories/api/queryOptions';
-import { getSprintsQueryOptions } from '@modules/Sprints/api/queryOptions';
+import { Button, Flex, Select, Text } from '@gravity-ui/uikit';
 import { TransactionsTable } from '@modules/Transactions';
 import { getTransactionsQueryOptions } from '@modules/Transactions/api/queryOptions';
-import { DATE_FORMAT } from '@system/consts';
+import { formatSprintName } from '@system/utils/formatSprintName';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import dayjs from 'dayjs';
-import _ from 'lodash';
 import React, { useMemo } from 'react';
 import { DashboardSearchParams } from '../../routes/dashboard';
+import { useGetReport } from './api';
 import { CategoriesDoughnutChart } from './components/CategoriesDoughnutChart';
 import { SprintsBarChart } from './components/SprintsBarChart';
 import styles from './Dashboard.module.scss';
@@ -19,35 +16,39 @@ export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const search = useSearch({ from: '/dashboard/' }) as DashboardSearchParams;
 
-  const { data: transactions } = useQuery(
+  const { data: transactions, isPlaceholderData } = useQuery(
     getTransactionsQueryOptions({
       filters: {
         sprintId: search.sprintId,
-        categoryId: search.categoryId,  
+        categoryId: search.categoryId,
       }
+    }, {
+      keepPrevious: true
     })
   );
 
-  const { data: sprints } = useQuery(getSprintsQueryOptions());
-  const { data: categories } = useQuery(getCategoriesQueryOptions());
-
-  const groupedTransactions = useMemo(() => {
-    const bySprint = _.groupBy(transactions?.data, "sprintId");
-    const byCategory = _.groupBy(transactions?.data, "category.id");
-    return { bySprint, byCategory };
-  }, [transactions]);
+  const { data: reportData, } = useGetReport({
+    sprintId: search.sprintId,
+    categoryId: search.categoryId
+  });
 
   const handleSprintClick = (sprintId: number) => {
     navigate({
       to: '/dashboard',
-      search: { ...search, sprintId },
+      search: {
+        ...search,
+        sprintId: search.sprintId === sprintId ? undefined : sprintId
+      },
     });
   };
 
   const handleCategoryClick = (categoryId: number) => {
     navigate({
       to: '/dashboard',
-      search: { ...search, categoryId },
+      search: {
+        ...search,
+        categoryId: search.categoryId === categoryId ? undefined : categoryId
+      },
     });
   };
 
@@ -58,117 +59,97 @@ export const Dashboard: React.FC = () => {
     });
   };
 
-  const handleRemoveSprintFilter = () => {
+
+
+  const handleSprintSelectChange = (value: string[]) => {
+    const sprintId = value.length > 0 ? Number(value[0]) : undefined;
     navigate({
       to: '/dashboard',
-      search: { ...search, sprintId: undefined },
+      search: { ...search, sprintId },
     });
   };
 
-  const handleRemoveCategoryFilter = () => {
+  const handleCategorySelectChange = (value: string[]) => {
+    const categoryId = value.length > 0 ? Number(value[0]) : undefined;
     navigate({
       to: '/dashboard',
-      search: { ...search, categoryId: undefined },
+      search: { ...search, categoryId },
     });
   };
 
-  const showSprintsChart = !search.sprintId;
-  const showCategoriesChart = !search.categoryId;
+  const hasActiveFilters = search.sprintId || search.categoryId;
 
-  const activeFilters = useMemo(() => {
-    const filters = [];
+  const sprintOptions = useMemo(() => {
+    if (!reportData?.sprints?.items) return [];
+    return reportData.sprints.items.map(sprint => ({
+      value: sprint.id.toString(),
+      content: formatSprintName(sprint.startDate, sprint.endDate)
+    }))
+  }, [reportData?.sprints?.items]);
 
-    if (search.sprintId) {
-      const sprint = sprints?.data?.find(s => s.id === search.sprintId);
-      if (sprint) {
-        filters.push({
-          type: 'sprint',
-          label: `Спринт: ${dayjs(sprint.startDate).format(DATE_FORMAT)} - ${dayjs(sprint.endDate).format(DATE_FORMAT)}`,
-          onRemove: handleRemoveSprintFilter,
-        });
-      }
-    }
-
-    if (search.categoryId) {
-      const category = categories?.data?.find(c => c.id === search.categoryId);
-      if (category) {
-        filters.push({
-          type: 'category',
-          label: `Категория: ${category.name}`,
-          onRemove: handleRemoveCategoryFilter,
-        });
-      }
-    }
-
-    return filters;
-  }, [search, sprints?.data, categories?.data]);
-
-  const hasActiveFilters = activeFilters.length > 0;
+  const categoryOptions = useMemo(() => {
+    if (!reportData?.categories?.items) return [];
+    return reportData.categories.items.map(category => ({
+      value: category.id.toString(),
+      content: category.name
+    }))
+  }, [reportData?.categories?.items]);
 
   return (
     <div className={styles.content}>
-      {hasActiveFilters && (
-        <div className={styles.filters}>
-          <Flex gap={3} alignItems="center" spacing={{ mb: 5 }}>
-            <Text variant="body-2" color="secondary">
-              Активные фильтры:
-            </Text>
-            <Flex gap={2} alignItems="center">
-
-              {activeFilters.map((filter, index) => (
-                <Flex
-                  key={`${filter.type}-${index}`}
-                  gap={1}
-                  alignItems="center"
-                >
-                  <Label type='close' onCloseClick={filter.onRemove}>
-                    {filter.label}
-                  </Label>
-                </Flex>
-              ))}
-            </Flex>
-
-            {activeFilters.length > 1 && (
+      <div className={styles.filters}>
+        <Flex gap={3} alignItems="center" spacing={{ mb: 5 }}>
+          <Text variant="body-2" color="secondary">
+            Фильтры:
+          </Text>
+          <Flex gap={2} alignItems="center">
+            <Select
+              placeholder="Выберите спринт"
+              options={sprintOptions}
+              value={search.sprintId ? [search.sprintId.toString()] : []}
+              onUpdate={handleSprintSelectChange}
+              width={200}
+              hasClear
+            />
+            <Select
+              placeholder="Выберите категорию"
+              options={categoryOptions}
+              value={search.categoryId ? [search.categoryId.toString()] : []}
+              onUpdate={handleCategorySelectChange}
+              width={200}
+              hasClear
+            />
+            {hasActiveFilters && (
               <Button
                 view="outlined"
-                size="s"
                 onClick={handleResetFilters}
               >
                 Сбросить все
               </Button>
             )}
           </Flex>
-        </div>
-      )}
+        </Flex>
+      </div>
 
       <div className={styles.charts}>
-        {showSprintsChart && Object.keys(groupedTransactions.bySprint).length > 0 && (
-          <Card maxWidth={"none"} title='Спринты'>
-            <Flex style={{ height: '100%' }} alignItems='center'>
-              <SprintsBarChart
-                data={groupedTransactions.bySprint}
-                onSprintSelect={handleSprintClick}
-              />
-            </Flex>
-          </Card>
-        )}
-        {showCategoriesChart && Object.keys(groupedTransactions.byCategory).length > 0 && (
-          <Card maxWidth={"none"} title='Категории'>
-            <CategoriesDoughnutChart
-              data={groupedTransactions.byCategory}
-              onCategorySelect={handleCategoryClick}
-            />
-          </Card>
-        )}
 
-        {(showSprintsChart && Object.keys(groupedTransactions.bySprint).length === 0) ||
-          (showCategoriesChart && Object.keys(groupedTransactions.byCategory).length === 0) ? (
-          <Flex alignItems="center" justifyContent="center" style={{ width: '100%', height: '100%' }}>
-            <Text variant="body-2" color="secondary">
-              Нет данных для отображения
-            </Text>
+        <Card maxWidth={"none"} title='Спринты'>
+          <Flex style={{ height: '100%' }} alignItems='center'>
+            <SprintsBarChart
+              data={reportData?.sprints?.items || []}
+              onSprintSelect={handleSprintClick}
+              selectedSprintId={search.sprintId}
+            />
           </Flex>
-        ) : null}
+        </Card>
+
+        <Card maxWidth={"none"} title='Категории'>
+          <CategoriesDoughnutChart
+            selectedCategoryId={search.categoryId}
+            data={reportData?.categories?.items || []}
+            onCategorySelect={handleCategoryClick}
+          />
+        </Card>
       </div>
 
       <div className={styles.transactions}>
@@ -176,6 +157,7 @@ export const Dashboard: React.FC = () => {
           <TransactionsTable
             transactions={transactions?.data || []}
             width='max'
+            isPreviousData={isPlaceholderData}
           />
         </Card>
       </div>

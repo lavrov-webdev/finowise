@@ -50,3 +50,8 @@ export class SprintDetailedResponseDto extends SprintResponseDto {
 }
 
 export class SprintIdDto extends PickType(SprintResponseDto, ['id']) { }
+
+export class SprintReportResponseDto extends SprintResponseDto {
+  @ApiProperty({ example: 2000 })
+  totalSpend: number;
+}
