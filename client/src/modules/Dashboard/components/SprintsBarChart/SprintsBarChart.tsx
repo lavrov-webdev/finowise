@@ -67,7 +67,7 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick: _onCli
   };
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
+    <ResponsiveContainer width="100%" height={350}>
       <BarChart
         data={chartData}
         style={{ cursor: 'pointer' }}
