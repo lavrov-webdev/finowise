@@ -16,7 +16,7 @@ export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const search = useSearch({ from: '/dashboard/' }) as DashboardSearchParams;
 
-  const { data: transactions } = useQuery(
+  const { data: transactions, isPlaceholderData } = useQuery(
     getTransactionsQueryOptions({
       filters: {
         sprintId: search.sprintId,
@@ -165,6 +165,7 @@ export const Dashboard: React.FC = () => {
           <TransactionsTable
             transactions={transactions?.data || []}
             width='max'
+            isPreviousData={isPlaceholderData}
           />
         </Card>
       </div>
