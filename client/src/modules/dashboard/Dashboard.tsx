@@ -139,6 +139,7 @@ export const Dashboard: React.FC = () => {
             <SprintsBarChart
               data={reportData?.sprints?.items || []}
               onSprintSelect={handleSprintClick}
+              selectedSprintId={search.sprintId}
             />
           </Flex>
         </Card>

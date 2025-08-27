@@ -4,22 +4,30 @@ import { DATE_FORMAT } from "@system/consts";
 import { formatAmount } from "@system/utils/formatAmount";
 import dayjs from "dayjs";
 import React, { MouseEventHandler, useMemo } from 'react';
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid, Cell } from 'recharts';
 
 interface BarChartProps {
   data: SprintReportResponseDto[];
   onClick?: MouseEventHandler<HTMLCanvasElement>;
   onSprintSelect?: (sprintId: number) => void;
+  selectedSprintId?: number;
 }
 
-export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick: _onClick, onSprintSelect }) => {
+export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick: _onClick, onSprintSelect, selectedSprintId }) => {
   const chartData = useMemo(() => {
     return data.map(sprint => ({
       sprintId: sprint.id,
       name: `${dayjs(sprint.startDate).format(DATE_FORMAT)} - ${dayjs(sprint.endDate).format(DATE_FORMAT)}`,
-      amount: sprint.totalSpend
+      amount: sprint.totalSpend,
+      fill: selectedSprintId === undefined 
+        ? CHART_COLORS[0] 
+        : sprint.id === selectedSprintId 
+          ? CHART_COLORS[0] 
+          : '#D3D3D3',
+      stroke: selectedSprintId !== undefined && sprint.id === selectedSprintId ? '#333' : 'none',
+      strokeWidth: selectedSprintId !== undefined && sprint.id === selectedSprintId ? 2 : 0
     }));
-  }, [data]);
+  }, [data, selectedSprintId]);
 
   const handleClick = (data: any) => {
     let sprintId: number | undefined;
@@ -79,11 +87,19 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick: _onCli
         <Tooltip content={<CustomTooltip />} />
         <Bar 
           dataKey="amount" 
-          fill={CHART_COLORS[0]}
           radius={[0, 4, 4, 0]}
           onClick={handleClick}
           onMouseDown={handleClick}
-        />
+        >
+          {chartData.map((entry, index) => (
+            <Cell 
+              key={`cell-${index}`} 
+              fill={entry.fill}
+              stroke={entry.stroke}
+              strokeWidth={entry.strokeWidth}
+            />
+          ))}
+        </Bar>
       </BarChart>
     </ResponsiveContainer>
   );
