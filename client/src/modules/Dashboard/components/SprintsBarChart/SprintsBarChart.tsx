@@ -1,5 +1,5 @@
 import { SprintReportResponseDto } from '@generated';
-import { CHART_COLORS } from "@modules/Dashboard/consts";
+import { BAR_COLOR } from "@modules/Dashboard/consts";
 import { formatAmount } from "@system/utils/formatAmount";
 import { formatSprintName } from "@system/utils/formatSprintName";
 import React, { MouseEventHandler, useMemo } from 'react';
@@ -19,9 +19,9 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick: _onCli
       name: formatSprintName(sprint.startDate, sprint.endDate),
       amount: sprint.totalSpend,
       fill: selectedSprintId === undefined 
-        ? CHART_COLORS[0] 
+        ? BAR_COLOR 
         : sprint.id === selectedSprintId 
-          ? CHART_COLORS[0] 
+          ? BAR_COLOR
           : '#D3D3D3',
     }));
   }, [data, selectedSprintId]);
@@ -55,7 +55,7 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick: _onCli
           boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
         }}>
           <p style={{ margin: '0 0 4px 0', fontWeight: 'bold' }}>{label}</p>
-          <p style={{ margin: '0', color: CHART_COLORS[0] }}>
+          <p style={{ margin: '0', color: BAR_COLOR }}>
             {formatAmount(payload[0].value)}
           </p>
         </div>
