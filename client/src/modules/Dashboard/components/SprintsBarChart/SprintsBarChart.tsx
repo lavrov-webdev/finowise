@@ -23,8 +23,6 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick: _onCli
         : sprint.id === selectedSprintId 
           ? CHART_COLORS[0] 
           : '#D3D3D3',
-      stroke: selectedSprintId !== undefined && sprint.id === selectedSprintId ? '#333' : 'none',
-      strokeWidth: selectedSprintId !== undefined && sprint.id === selectedSprintId ? 2 : 0
     }));
   }, [data, selectedSprintId]);
 
@@ -91,12 +89,10 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({ data, onClick: _onCli
           onClick={handleClick}
           onMouseDown={handleClick}
         >
-          {chartData.map((entry, index) => (
+          {chartData.map((entry) => (
             <Cell 
-              key={`cell-${index}`} 
+              key={`cell-${entry.sprintId}`} 
               fill={entry.fill}
-              stroke={entry.stroke}
-              strokeWidth={entry.strokeWidth}
             />
           ))}
         </Bar>

@@ -65,20 +65,6 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
     return "#D3D3D3";
   };
 
-  const getCellStroke = (entry: any) => {
-    if (selectedCategoryId !== undefined && entry.categoryId === selectedCategoryId) {
-      return '#333';
-    }
-    return 'none';
-  };
-
-  const getCellStrokeWidth = (entry: any) => {
-    if (selectedCategoryId !== undefined && entry.categoryId === selectedCategoryId) {
-      return 3;
-    }
-    return 0;
-  };
-
   return (
     <ResponsiveContainer width="100%" height={350}>
       <PieChart>
@@ -97,8 +83,6 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
             <Cell
               key={`cell-${entry.id}`}
               fill={getCellColor(entry)}
-              stroke={getCellStroke(entry)}
-              strokeWidth={getCellStrokeWidth(entry)}
             />
           ))}
         </Pie>
