@@ -55,6 +55,18 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
     return null;
   };
 
+  const getCellColor = (entry: any) => {
+    if (selectedCategoryId === undefined) {
+      return stringToColor(entry.name + entry.categoryId);
+    }
+
+    if (entry.categoryId === selectedCategoryId) {
+      return stringToColor(entry.name + entry.categoryId);
+    }
+
+    return "#D3D3D3";
+  };
+
   const getCellStroke = (entry: any) => {
     if (selectedCategoryId !== undefined && entry.categoryId === selectedCategoryId) {
       return '#333';
@@ -86,7 +98,7 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
           {chartData.map((entry) => (
             <Cell
               key={`cell-${entry.id}`}
-              fill={stringToColor(entry.name + entry.id)}
+              fill={getCellColor(entry)}
               stroke={getCellStroke(entry)}
               strokeWidth={getCellStrokeWidth(entry)}
             />
