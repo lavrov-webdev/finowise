@@ -2,9 +2,9 @@ import { CategoryReportResponseDto } from '@generated';
 import { formatAmount } from "@system/utils/formatAmount";
 import React, { MouseEventHandler, useMemo } from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, Legend } from 'recharts';
-import { COLORS, GRAY_COLOR } from './const';
 import styles from './CategoriesDoughnutChart.module.scss';
 import _ from 'lodash';
+import { stringToColor } from './utils';
 
 interface DoughnutChartProps {
   data: CategoryReportResponseDto[];
@@ -55,18 +55,6 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
     return null;
   };
 
-  const getCellColor = (entry: any, index: number) => {
-    if (selectedCategoryId === undefined) {
-      return COLORS[index % COLORS.length];
-    }
-
-    if (entry.categoryId === selectedCategoryId) {
-      return COLORS[index % COLORS.length];
-    }
-
-    return GRAY_COLOR;
-  };
-
   const getCellStroke = (entry: any) => {
     if (selectedCategoryId !== undefined && entry.categoryId === selectedCategoryId) {
       return '#333';
@@ -95,10 +83,10 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
           onClick={handleClick}
           className={styles.pieChart}
         >
-          {chartData.map((entry, index) => (
+          {chartData.map((entry) => (
             <Cell
               key={`cell-${entry.id}`}
-              fill={getCellColor(entry, index)}
+              fill={stringToColor(entry.name + entry.id)}
               stroke={getCellStroke(entry)}
               strokeWidth={getCellStrokeWidth(entry)}
             />
