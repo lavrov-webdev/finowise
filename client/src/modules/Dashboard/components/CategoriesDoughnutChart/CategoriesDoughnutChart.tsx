@@ -23,14 +23,12 @@ type ChartData = {
 export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, onClick: _onClick, onCategorySelect, selectedCategoryId }) => {
   const chartData = useMemo(() =>
     data.reduce<ChartData[]>((acc, category) => {
-      if (category.totalSpend > 0) {
-        acc.push({
-          id: category.id,
-          name: category.name,
-          value: category.totalSpend,
-          categoryId: category.id
-        });
-      }
+      acc.push({
+        id: category.id,
+        name: category.name,
+        value: category.totalSpend,
+        categoryId: category.id
+      });
       return acc;
     }, []),
     [data]);
@@ -88,9 +86,9 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
           data={chartData}
           cx="50%"
           cy="50%"
-          innerRadius={60}
-          outerRadius={120}
-          paddingAngle={5}
+          innerRadius={50}
+          outerRadius={100}
+          paddingAngle={0}
           dataKey="value"
           onClick={handleClick}
           className={styles.pieChart}
