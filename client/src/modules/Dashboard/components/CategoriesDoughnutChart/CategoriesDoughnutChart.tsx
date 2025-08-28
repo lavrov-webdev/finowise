@@ -4,6 +4,7 @@ import React, { MouseEventHandler, useMemo } from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { COLORS, GRAY_COLOR } from './const';
 import styles from './CategoriesDoughnutChart.module.scss';
+import _ from 'lodash';
 
 interface DoughnutChartProps {
   data: CategoryReportResponseDto[];
@@ -12,18 +13,29 @@ interface DoughnutChartProps {
   selectedCategoryId?: number;
 }
 
-export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, onClick: _onClick, onCategorySelect, selectedCategoryId }) => {
-  const chartData = useMemo(() => data.map(category => ({
-    id: category.id,
-    name: category.name,
-    value: category.totalSpend,
-    categoryId: category.id
-  })), [data]);
+type ChartData = {
+  id: number;
+  name: string;
+  value: number;
+  categoryId: number;
+}
 
-  const total = useMemo(() =>
-    chartData.reduce((sum, item) => sum + item.value, 0),
-    [chartData]
-  );
+export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, onClick: _onClick, onCategorySelect, selectedCategoryId }) => {
+  const chartData = useMemo(() =>
+    data.reduce<ChartData[]>((acc, category) => {
+      if (category.totalSpend > 0) {
+        acc.push({
+          id: category.id,
+          name: category.name,
+          value: category.totalSpend,
+          categoryId: category.id
+        });
+      }
+      return acc;
+    }, []),
+    [data]);
+
+  const total = useMemo(() => _.sumBy(chartData, 'value'), [chartData]);
 
   const handleClick = (entry: any) => {
     onCategorySelect?.(entry.categoryId);
