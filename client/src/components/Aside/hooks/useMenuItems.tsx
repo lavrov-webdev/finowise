@@ -83,7 +83,7 @@ export const useMenuItems = (): MenuItem[] => {
       },
       {
         id: "dashboard",
-        title: "Dashboard",
+        title: "Дашборд",
         icon: ChartDonut,
         itemWrapper(p, makeItem) {
           return (
