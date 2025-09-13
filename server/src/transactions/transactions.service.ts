@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { FilterTransactionsDto } from './dto/filter-transactions.dto';
-import { TransactionDetailedResponseDto } from './dto/transaction.response.dto';
+import { TransactionsSearchResponseDto } from './dto/transaction.response.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { EnvelopesService } from 'src/envelopes/envelopes.service';
 import { Prisma } from '@prisma/client';
@@ -17,7 +17,7 @@ export class TransactionsService {
   async findTransactions(
     filterDto: FilterTransactionsDto,
     userId: number,
-  ): Promise<TransactionDetailedResponseDto[]> {
+  ): Promise<TransactionsSearchResponseDto> {
     // Build dynamic where clause
     const where: Prisma.TransactionWhereInput = { userId };
 
@@ -41,12 +41,7 @@ export class TransactionsService {
         where.date.gte = new Date(filterDto.dateFrom);
       }
       if (filterDto.dateTo) {
-        // If only dateTo is provided, date can still be used
-        if (!filterDto.dateFrom) {
-          where.date = { lte: new Date(filterDto.dateTo) };
-        } else {
-          where.date.lte = new Date(filterDto.dateTo);
-        }
+        where.date.lte = new Date(filterDto.dateTo);
       }
     }
 
@@ -57,12 +52,7 @@ export class TransactionsService {
         where.amount.gte = filterDto.amountMin;
       }
       if (filterDto.amountMax !== undefined) {
-        // If only amountMax is provided, amount can still be used
-        if (filterDto.amountMin === undefined) {
-          where.amount = { lte: filterDto.amountMax };
-        } else {
-          where.amount.lte = filterDto.amountMax;
-        }
+        where.amount.lte = filterDto.amountMax;
       }
     }
 
@@ -92,10 +82,7 @@ export class TransactionsService {
     const queryOptions: Prisma.TransactionFindManyArgs = {
       where,
       orderBy,
-      include: {
-        category: true,
-      },
-    };
+    }
 
     // Add pagination if provided
     if (filterDto.limit !== undefined) {
@@ -106,8 +93,15 @@ export class TransactionsService {
       queryOptions.skip = filterDto.offset;
     }
 
-    const result = await this.prisma.transaction.findMany(queryOptions);
-    return result as unknown as TransactionDetailedResponseDto[];
+    const [transactions, total] = await Promise.all([
+      this.prisma.transaction.findMany({ ...queryOptions, include: { category: true } }),
+      this.prisma.transaction.count({ where })
+    ]);
+
+    return {
+      transactions,
+      total,
+    }
   }
 
   async create(createTransactionDto: CreateTransactionDto, userId: number) {

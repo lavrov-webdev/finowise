@@ -20,3 +20,12 @@
   grid-column: 1 / -1;
 }
 
+.pagination {
+  position: sticky;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  background-color: var(--g-color-base-background);
+}
