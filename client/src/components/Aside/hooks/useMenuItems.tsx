@@ -1,4 +1,11 @@
-import { ChartDonut, CirclePlay, CirclePlus, ListTimeline, Plus, Tag } from "@gravity-ui/icons";
+import {
+  ChartDonut,
+  CirclePlay,
+  CirclePlus,
+  ListTimeline,
+  Plus,
+  Tag,
+} from "@gravity-ui/icons";
 import { MenuItem } from "@gravity-ui/navigation";
 import { Loader } from "@gravity-ui/uikit";
 import { getCurrentSprintQueryOptions } from "@modules/Sprints";
@@ -31,7 +38,7 @@ export const useMenuItems = (): MenuItem[] => {
         },
         id: "currentSprint",
         title: "Текущий спринт",
-        icon: CirclePlay
+        icon: CirclePlay,
       },
       {
         itemWrapper(p, makeItem) {
@@ -43,7 +50,7 @@ export const useMenuItems = (): MenuItem[] => {
         },
         id: "spirnts",
         title: "Спринты",
-        icon: ListTimeline
+        icon: ListTimeline,
       },
       {
         itemWrapper(p, makeItem) {
@@ -55,7 +62,7 @@ export const useMenuItems = (): MenuItem[] => {
         },
         id: "createTransaction",
         title: "Добавить транзакцию",
-        icon: Plus
+        icon: Plus,
       },
       {
         itemWrapper(p, makeItem) {
@@ -67,7 +74,7 @@ export const useMenuItems = (): MenuItem[] => {
         },
         id: "createSprint",
         title: "Начать новый спринт",
-        icon: CirclePlus
+        icon: CirclePlus,
       },
       {
         id: "categories",
@@ -79,7 +86,7 @@ export const useMenuItems = (): MenuItem[] => {
             </Link>
           );
         },
-        icon: Tag
+        icon: Tag,
       },
       {
         id: "dashboard",

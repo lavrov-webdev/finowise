@@ -1,6 +1,5 @@
 import { Flex } from "@gravity-ui/uikit";
-import { ReactNode } from "@tanstack/react-router";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 
 export const ModalFooter: FC<{ children: ReactNode }> = ({ children }) => {
   return (

@@ -6,7 +6,8 @@ import { transactionsControllerRemove } from "@generated";
 
 export const useDeleteTransaction = () => {
   return useMutation({
-    mutationFn: (id: number) => transactionsControllerRemove({ path: { id: id.toString() } }),
+    mutationFn: (id: number) =>
+      transactionsControllerRemove({ path: { id: id.toString() } }),
     onSuccess(res) {
       queryClient.invalidateQueries({
         queryKey: getSprintQueryKey(res.data?.sprintId),

@@ -38,7 +38,7 @@ export const Aside = () => {
             </Link>
           );
         },
-        icon: House
+        icon: House,
       }}
       onClosePanel={() => setOpenedAsidePanel(null)}
       panelItems={panelItems}

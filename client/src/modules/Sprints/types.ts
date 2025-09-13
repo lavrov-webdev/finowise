@@ -1,8 +1,6 @@
 import { z } from "zod";
 
-import {
-  CreateEnvelopeDto
-} from "@modules/Envelopes";
+import { CreateEnvelopeDto } from "@modules/Envelopes";
 
 export const CreateSprintDto = z.object({
   startDate: z.string({ required_error: "Введите дату начала" }),

@@ -9,10 +9,11 @@ export const useSignIn = () => {
   const addErrorToast = useAddErrorToaster();
   return useMutation({
     mutationKey: [AUTH_QUERY_KEY],
-    mutationFn: (data: AuthControllerSignInData["body"]) => authControllerSignIn({ body: data }),
+    mutationFn: (data: AuthControllerSignInData["body"]) =>
+      authControllerSignIn({ body: data }),
     onSuccess: async () => {
-      await queryClient.invalidateQueries()
-      await queryClient.clear()
+      await queryClient.invalidateQueries();
+      await queryClient.clear();
     },
     onError(error: AxiosError) {
       addErrorToast("Ошибка авторизации", error);

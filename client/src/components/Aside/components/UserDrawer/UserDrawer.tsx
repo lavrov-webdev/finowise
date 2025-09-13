@@ -9,9 +9,9 @@ export const UserDrawer = () => {
   const logoutMutation = useLogout();
   const [_, setOpenedAsidePanel] = useAtom(openedAsidePanelStore);
   const onLogout = async () => {
-    await logoutMutation.mutateAsync()
-    setOpenedAsidePanel(null)
-  }
+    await logoutMutation.mutateAsync();
+    setOpenedAsidePanel(null);
+  };
   if (userInfoState.isLoading) {
     return <Loader />;
   }

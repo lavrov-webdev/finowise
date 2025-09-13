@@ -1,7 +1,11 @@
 import { filterUndefined } from "@system/utils/filterUndefined";
 import { SPRINTS_QUERY_KEY, CURRENT_SPRINT_QUERY_KEY } from "../consts";
 import { queryOptions } from "@tanstack/react-query";
-import { sprintsControllerFindAll, sprintsControllerFindCurrent, sprintsControllerFindOne } from "@generated";
+import {
+  sprintsControllerFindAll,
+  sprintsControllerFindCurrent,
+  sprintsControllerFindOne,
+} from "@generated";
 
 export const getSprintQueryKey = (id?: number) =>
   filterUndefined([SPRINTS_QUERY_KEY, id]);
@@ -18,7 +22,7 @@ export const getSprintByIdQueryOptions = (id?: number) =>
     queryKey: getSprintQueryKey(id),
     queryFn: () => sprintsControllerFindOne({ path: { id: id!.toString() } }),
     enabled: !!id,
-    retry: false
+    retry: false,
   });
 
 export const getCurrentSprintQueryOptions = () =>

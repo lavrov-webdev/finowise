@@ -19,7 +19,9 @@ export const EnvelopesPreview: FC<Props> = ({
   selectedEnvelopeId,
 }) => {
   const sprintState = useQuery(getSprintByIdQueryOptions(sprintId));
-  const tableData = useEnvelopesSummary(sprintState.data?.data?.envelopes || []);
+  const tableData = useEnvelopesSummary(
+    sprintState.data?.data?.envelopes || [],
+  );
 
   return sprintState.isLoading ? (
     <Loader size="l" className={styles.loader} />

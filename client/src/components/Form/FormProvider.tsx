@@ -18,6 +18,7 @@ export const FormProvider: TFormProvider = ({ children, ...rest }) => {
     <RHFFormProvider {...rest}>
       {children}
       {process.env.NODE_ENV === "development" ? (
+        // @ts-ignore
         <DevTool control={rest.control} />
       ) : null}
     </RHFFormProvider>

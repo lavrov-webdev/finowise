@@ -5,7 +5,17 @@ import { getSprintQueryKey } from "../queryOptions";
 
 export const useEditSprintMutation = () => {
   return useMutation({
-    mutationFn: ({ sprint, sprintId }: { sprint: UpdateSprintDto, sprintId: number }) => sprintsControllerUpdate({ body: sprint, path: { id: sprintId.toString() } }),
+    mutationFn: ({
+      sprint,
+      sprintId,
+    }: {
+      sprint: UpdateSprintDto;
+      sprintId: number;
+    }) =>
+      sprintsControllerUpdate({
+        body: sprint,
+        path: { id: sprintId.toString() },
+      }),
     onSuccess() {
       queryClient.invalidateQueries({
         queryKey: getSprintQueryKey(),

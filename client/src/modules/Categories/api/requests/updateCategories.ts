@@ -18,6 +18,8 @@ export const updateCategories = async ({
   return Promise.all([
     categoriesControllerCreate({ body: { categories: newCategories } }),
     categoriesControllerUpdate({ body: { categories: editableCategories } }),
-    ...Array.from(categoriesToDelete).map((id) => categoriesControllerRemove({ path: { id: id.toString() } })),
+    ...Array.from(categoriesToDelete).map((id) =>
+      categoriesControllerRemove({ path: { id: id.toString() } }),
+    ),
   ]);
 };

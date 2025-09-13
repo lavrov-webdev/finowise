@@ -10,7 +10,8 @@ export const useDeleteSprintMutation = () => {
   const successToaster = useAddSuccessToaster();
 
   return useMutation({
-    mutationFn: (id: number) => sprintsControllerRemove({ path: { id: id.toString() } }),
+    mutationFn: (id: number) =>
+      sprintsControllerRemove({ path: { id: id.toString() } }),
     onSuccess() {
       queryClient.invalidateQueries({
         queryKey: getSprintQueryKey(),
@@ -22,4 +23,4 @@ export const useDeleteSprintMutation = () => {
       navigate({ to: "/sprints" });
     },
   });
-}; 
+};

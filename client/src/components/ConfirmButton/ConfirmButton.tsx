@@ -24,7 +24,9 @@ export const ConfirmButton: FC<PropsWithChildren<Props>> = ({
       </Button>
       <Popup anchorRef={buttonRef} onClose={closePopup} open={isOpen}>
         <Flex direction="column" gap={1} spacing={{ py: 2, px: 2 }}>
-          <Text variant="caption-2" style={{textAlign: 'center'}}>{confirmText}</Text>
+          <Text variant="caption-2" style={{ textAlign: "center" }}>
+            {confirmText}
+          </Text>
           <Button
             width="max"
             view="outlined-danger"

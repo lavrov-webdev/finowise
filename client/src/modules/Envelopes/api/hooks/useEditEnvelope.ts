@@ -8,7 +8,17 @@ import { AxiosError } from "axios";
 export const useEditEnvelope = (onSuccess: () => void) => {
   const addErrorToaster = useAddErrorToaster();
   return useMutation({
-    mutationFn: ({ envelope, envelopeId }: { envelope: UpdateEnvelopeDto, envelopeId: number }) => envelopesControllerUpdate({ body: envelope, path: { id: envelopeId.toString() } }),
+    mutationFn: ({
+      envelope,
+      envelopeId,
+    }: {
+      envelope: UpdateEnvelopeDto;
+      envelopeId: number;
+    }) =>
+      envelopesControllerUpdate({
+        body: envelope,
+        path: { id: envelopeId.toString() },
+      }),
     async onSuccess() {
       await queryClient.invalidateQueries({
         queryKey: getSprintQueryKey(),

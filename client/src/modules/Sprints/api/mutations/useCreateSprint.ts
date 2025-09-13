@@ -9,7 +9,8 @@ export const useCreateSprint = () => {
   const errorToaster = useAddErrorToaster();
   const successToaster = useAddSuccessToaster();
   return useMutation({
-    mutationFn: (sprint: CreateSprintDto) => sprintsControllerCreate({ body: sprint }),
+    mutationFn: (sprint: CreateSprintDto) =>
+      sprintsControllerCreate({ body: sprint }),
     onSuccess: () => {
       successToaster("Спринт создан");
       queryClient.invalidateQueries({

@@ -6,9 +6,17 @@ import { transactionsControllerUpdate, UpdateTransactionDto } from "@generated";
 
 export const useEditTransaction = (onSuccess: () => void) => {
   return useMutation({
-    mutationFn: (
-      { transaction, transactionId }: { transaction: UpdateTransactionDto, transactionId: number }
-    ) => transactionsControllerUpdate({ body: transaction, path: { id: transactionId.toString() } }),
+    mutationFn: ({
+      transaction,
+      transactionId,
+    }: {
+      transaction: UpdateTransactionDto;
+      transactionId: number;
+    }) =>
+      transactionsControllerUpdate({
+        body: transaction,
+        path: { id: transactionId.toString() },
+      }),
     onSuccess: (response) => {
       Promise.all([
         queryClient.invalidateQueries({

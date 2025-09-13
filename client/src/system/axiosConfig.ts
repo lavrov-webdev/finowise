@@ -1,11 +1,10 @@
 import { client } from "@generated";
-import axiosRetry from 'axios-retry'
+import axiosRetry from "axios-retry";
 
 client.setConfig({
-    baseURL: "/api",
-    withCredentials: true,
-    throwOnError: true,
-})
+  baseURL: "/api",
+  withCredentials: true,
+  throwOnError: true,
+});
 
-
-axiosRetry(client.instance, { retries: 0 })
+axiosRetry(client.instance, { retries: 0 });

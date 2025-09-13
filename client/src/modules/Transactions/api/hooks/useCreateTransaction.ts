@@ -6,7 +6,8 @@ import { CreateTransactionDto, transactionsControllerCreate } from "@generated";
 
 export const useCreateTransaction = () => {
   return useMutation({
-    mutationFn: (transaction: CreateTransactionDto) => transactionsControllerCreate({ body: transaction }),
+    mutationFn: (transaction: CreateTransactionDto) =>
+      transactionsControllerCreate({ body: transaction }),
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: getTransactionsQueryKey() });
       queryClient.invalidateQueries({

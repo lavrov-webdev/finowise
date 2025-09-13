@@ -17,10 +17,10 @@ export const Route = createFileRoute("/dashboard/")({
 
 function Dashboard() {
   useEffect(() => {
-    document.body.style.overflowY = 'scroll';
+    document.body.style.overflowY = "scroll";
     return () => {
-      document.body.style.overflowY = 'auto';
+      document.body.style.overflowY = "auto";
     };
   }, []);
   return <DashboardComponent />;
-}; 
+}

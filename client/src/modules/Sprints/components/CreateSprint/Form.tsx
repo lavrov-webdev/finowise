@@ -35,15 +35,18 @@ export const Form = () => {
   useEffect(() => {
     form.setValue(
       "envelopes",
-      categoriesState.data?.data?.reduce<TCreateEnvelopeDto[]>((prev, category) => {
-        if (category.isActive) {
-          prev.push({
-            amount: 0,
-            categoryId: category.id,
-          });
-        }
-        return prev;
-      }, []) || [],
+      categoriesState.data?.data?.reduce<TCreateEnvelopeDto[]>(
+        (prev, category) => {
+          if (category.isActive) {
+            prev.push({
+              amount: 0,
+              categoryId: category.id,
+            });
+          }
+          return prev;
+        },
+        [],
+      ) || [],
     );
   }, [categoriesState.data]);
   const onSubmit = (data: TCreateSprintDto) => {

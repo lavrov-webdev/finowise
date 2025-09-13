@@ -10,10 +10,28 @@ type Props = {
   columnsKeys?: TTransactionColumnKey[];
   isPreviousData?: boolean;
   isLoading?: boolean;
-} & Omit<TableProps<TransactionDetailedResponseDto>, 'data' | 'columns' | 'emptyMessage'>
+} & Omit<
+  TableProps<TransactionDetailedResponseDto>,
+  "data" | "columns" | "emptyMessage"
+>;
 
-export const TransactionsTable: FC<Props> = ({ transactions, columnsKeys = ['amount', 'date', 'comment', 'actions'], isPreviousData, isLoading, ...props }) => {
-  const columns = useMemo(() => columnsKeys.map(key => transactionsColumns.find(transactionColumn => transactionColumn.id === key)!), [columnsKeys])
+export const TransactionsTable: FC<Props> = ({
+  transactions,
+  columnsKeys = ["amount", "date", "comment", "actions"],
+  isPreviousData,
+  isLoading,
+  ...props
+}) => {
+  const columns = useMemo(
+    () =>
+      columnsKeys.map(
+        (key) =>
+          transactionsColumns.find(
+            (transactionColumn) => transactionColumn.id === key,
+          )!,
+      ),
+    [columnsKeys],
+  );
   return (
     <div className={styles.container}>
       {!isPreviousData && isLoading && (

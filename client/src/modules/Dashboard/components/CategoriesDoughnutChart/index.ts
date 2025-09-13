@@ -1,1 +1,1 @@
-export { CategoriesDoughnutChart } from './CategoriesDoughnutChart'; 
+export { CategoriesDoughnutChart } from "./CategoriesDoughnutChart";

@@ -9,13 +9,17 @@ export const useSelectedEnvelopeTransactions = (
     if (selectedEnvelopeId === null) {
       return [];
     }
-    const selectedEnvelope = envelopes.find((envelope) => envelope.id === selectedEnvelopeId)
+    const selectedEnvelope = envelopes.find(
+      (envelope) => envelope.id === selectedEnvelopeId,
+    );
     if (!selectedEnvelope) {
-      return []
+      return [];
     }
-    return selectedEnvelope.transactions.map(transaction => ({
-      ...transaction,
-      category: selectedEnvelope.category
-    })) || []
+    return (
+      selectedEnvelope.transactions.map((transaction) => ({
+        ...transaction,
+        category: selectedEnvelope.category,
+      })) || []
+    );
   }, [envelopes, selectedEnvelopeId]);
 };

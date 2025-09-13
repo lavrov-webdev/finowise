@@ -8,9 +8,7 @@ const BaseTransaction = z.object({
       required_error: "Введите сумму",
     })
     .min(0, "Сумма не может быть меньше 0 ₽"),
-  date: z
-    .string()
-    .date(),
+  date: z.string().date(),
   comment: z
     .string()
     .optional()
@@ -35,5 +33,6 @@ export const EditTransactionDto = CreateTransactionDto.omit({
 export type TEditTransactionDto = z.input<typeof EditTransactionDto>;
 export type TEditTransactionDtoOut = z.output<typeof EditTransactionDto>;
 
-
-export type TTransactionColumnKey = keyof TransactionDetailedResponseDto | "actions"
+export type TTransactionColumnKey =
+  | keyof TransactionDetailedResponseDto
+  | "actions";

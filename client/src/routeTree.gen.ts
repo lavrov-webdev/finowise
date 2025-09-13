@@ -8,197 +8,199 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
-import { Route as TransactionsCreateIndexRouteImport } from './routes/transactions/create/index'
-import { Route as SprintsCurrentIndexRouteImport } from './routes/sprints/current/index'
-import { Route as SprintsSprintIdIndexRouteImport } from './routes/sprints/$sprintId/index'
+import { Route as rootRouteImport } from "./routes/__root";
+import { Route as IndexRouteImport } from "./routes/index";
+import { Route as DashboardIndexRouteImport } from "./routes/dashboard/index";
+import { Route as TransactionsCreateIndexRouteImport } from "./routes/transactions/create/index";
+import { Route as SprintsCurrentIndexRouteImport } from "./routes/sprints/current/index";
+import { Route as SprintsSprintIdIndexRouteImport } from "./routes/sprints/$sprintId/index";
 
-const SprintsIndexLazyRouteImport = createFileRoute('/sprints/')()
-const CategoriesIndexLazyRouteImport = createFileRoute('/categories/')()
-const SprintsCreateIndexLazyRouteImport = createFileRoute('/sprints/create/')()
+const SprintsIndexLazyRouteImport = createFileRoute("/sprints/")();
+const CategoriesIndexLazyRouteImport = createFileRoute("/categories/")();
+const SprintsCreateIndexLazyRouteImport = createFileRoute("/sprints/create/")();
 
 const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const SprintsIndexLazyRoute = SprintsIndexLazyRouteImport.update({
-  id: '/sprints/',
-  path: '/sprints/',
+  id: "/sprints/",
+  path: "/sprints/",
   getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/sprints/index.lazy').then((d) => d.Route))
+} as any).lazy(() =>
+  import("./routes/sprints/index.lazy").then((d) => d.Route),
+);
 const CategoriesIndexLazyRoute = CategoriesIndexLazyRouteImport.update({
-  id: '/categories/',
-  path: '/categories/',
+  id: "/categories/",
+  path: "/categories/",
   getParentRoute: () => rootRouteImport,
 } as any).lazy(() =>
-  import('./routes/categories/index.lazy').then((d) => d.Route),
-)
+  import("./routes/categories/index.lazy").then((d) => d.Route),
+);
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
-  id: '/dashboard/',
-  path: '/dashboard/',
+  id: "/dashboard/",
+  path: "/dashboard/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const SprintsCreateIndexLazyRoute = SprintsCreateIndexLazyRouteImport.update({
-  id: '/sprints/create/',
-  path: '/sprints/create/',
+  id: "/sprints/create/",
+  path: "/sprints/create/",
   getParentRoute: () => rootRouteImport,
 } as any).lazy(() =>
-  import('./routes/sprints/create/index.lazy').then((d) => d.Route),
-)
+  import("./routes/sprints/create/index.lazy").then((d) => d.Route),
+);
 const TransactionsCreateIndexRoute = TransactionsCreateIndexRouteImport.update({
-  id: '/transactions/create/',
-  path: '/transactions/create/',
+  id: "/transactions/create/",
+  path: "/transactions/create/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const SprintsCurrentIndexRoute = SprintsCurrentIndexRouteImport.update({
-  id: '/sprints/current/',
-  path: '/sprints/current/',
+  id: "/sprints/current/",
+  path: "/sprints/current/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const SprintsSprintIdIndexRoute = SprintsSprintIdIndexRouteImport.update({
-  id: '/sprints/$sprintId/',
-  path: '/sprints/$sprintId/',
+  id: "/sprints/$sprintId/",
+  path: "/sprints/$sprintId/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/dashboard': typeof DashboardIndexRoute
-  '/categories': typeof CategoriesIndexLazyRoute
-  '/sprints': typeof SprintsIndexLazyRoute
-  '/sprints/$sprintId': typeof SprintsSprintIdIndexRoute
-  '/sprints/current': typeof SprintsCurrentIndexRoute
-  '/transactions/create': typeof TransactionsCreateIndexRoute
-  '/sprints/create': typeof SprintsCreateIndexLazyRoute
+  "/": typeof IndexRoute;
+  "/dashboard": typeof DashboardIndexRoute;
+  "/categories": typeof CategoriesIndexLazyRoute;
+  "/sprints": typeof SprintsIndexLazyRoute;
+  "/sprints/$sprintId": typeof SprintsSprintIdIndexRoute;
+  "/sprints/current": typeof SprintsCurrentIndexRoute;
+  "/transactions/create": typeof TransactionsCreateIndexRoute;
+  "/sprints/create": typeof SprintsCreateIndexLazyRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/dashboard': typeof DashboardIndexRoute
-  '/categories': typeof CategoriesIndexLazyRoute
-  '/sprints': typeof SprintsIndexLazyRoute
-  '/sprints/$sprintId': typeof SprintsSprintIdIndexRoute
-  '/sprints/current': typeof SprintsCurrentIndexRoute
-  '/transactions/create': typeof TransactionsCreateIndexRoute
-  '/sprints/create': typeof SprintsCreateIndexLazyRoute
+  "/": typeof IndexRoute;
+  "/dashboard": typeof DashboardIndexRoute;
+  "/categories": typeof CategoriesIndexLazyRoute;
+  "/sprints": typeof SprintsIndexLazyRoute;
+  "/sprints/$sprintId": typeof SprintsSprintIdIndexRoute;
+  "/sprints/current": typeof SprintsCurrentIndexRoute;
+  "/transactions/create": typeof TransactionsCreateIndexRoute;
+  "/sprints/create": typeof SprintsCreateIndexLazyRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/dashboard/': typeof DashboardIndexRoute
-  '/categories/': typeof CategoriesIndexLazyRoute
-  '/sprints/': typeof SprintsIndexLazyRoute
-  '/sprints/$sprintId/': typeof SprintsSprintIdIndexRoute
-  '/sprints/current/': typeof SprintsCurrentIndexRoute
-  '/transactions/create/': typeof TransactionsCreateIndexRoute
-  '/sprints/create/': typeof SprintsCreateIndexLazyRoute
+  __root__: typeof rootRouteImport;
+  "/": typeof IndexRoute;
+  "/dashboard/": typeof DashboardIndexRoute;
+  "/categories/": typeof CategoriesIndexLazyRoute;
+  "/sprints/": typeof SprintsIndexLazyRoute;
+  "/sprints/$sprintId/": typeof SprintsSprintIdIndexRoute;
+  "/sprints/current/": typeof SprintsCurrentIndexRoute;
+  "/transactions/create/": typeof TransactionsCreateIndexRoute;
+  "/sprints/create/": typeof SprintsCreateIndexLazyRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
+  fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
-    | '/'
-    | '/dashboard'
-    | '/categories'
-    | '/sprints'
-    | '/sprints/$sprintId'
-    | '/sprints/current'
-    | '/transactions/create'
-    | '/sprints/create'
-  fileRoutesByTo: FileRoutesByTo
+    | "/"
+    | "/dashboard"
+    | "/categories"
+    | "/sprints"
+    | "/sprints/$sprintId"
+    | "/sprints/current"
+    | "/transactions/create"
+    | "/sprints/create";
+  fileRoutesByTo: FileRoutesByTo;
   to:
-    | '/'
-    | '/dashboard'
-    | '/categories'
-    | '/sprints'
-    | '/sprints/$sprintId'
-    | '/sprints/current'
-    | '/transactions/create'
-    | '/sprints/create'
+    | "/"
+    | "/dashboard"
+    | "/categories"
+    | "/sprints"
+    | "/sprints/$sprintId"
+    | "/sprints/current"
+    | "/transactions/create"
+    | "/sprints/create";
   id:
-    | '__root__'
-    | '/'
-    | '/dashboard/'
-    | '/categories/'
-    | '/sprints/'
-    | '/sprints/$sprintId/'
-    | '/sprints/current/'
-    | '/transactions/create/'
-    | '/sprints/create/'
-  fileRoutesById: FileRoutesById
+    | "__root__"
+    | "/"
+    | "/dashboard/"
+    | "/categories/"
+    | "/sprints/"
+    | "/sprints/$sprintId/"
+    | "/sprints/current/"
+    | "/transactions/create/"
+    | "/sprints/create/";
+  fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  DashboardIndexRoute: typeof DashboardIndexRoute
-  CategoriesIndexLazyRoute: typeof CategoriesIndexLazyRoute
-  SprintsIndexLazyRoute: typeof SprintsIndexLazyRoute
-  SprintsSprintIdIndexRoute: typeof SprintsSprintIdIndexRoute
-  SprintsCurrentIndexRoute: typeof SprintsCurrentIndexRoute
-  TransactionsCreateIndexRoute: typeof TransactionsCreateIndexRoute
-  SprintsCreateIndexLazyRoute: typeof SprintsCreateIndexLazyRoute
+  IndexRoute: typeof IndexRoute;
+  DashboardIndexRoute: typeof DashboardIndexRoute;
+  CategoriesIndexLazyRoute: typeof CategoriesIndexLazyRoute;
+  SprintsIndexLazyRoute: typeof SprintsIndexLazyRoute;
+  SprintsSprintIdIndexRoute: typeof SprintsSprintIdIndexRoute;
+  SprintsCurrentIndexRoute: typeof SprintsCurrentIndexRoute;
+  TransactionsCreateIndexRoute: typeof TransactionsCreateIndexRoute;
+  SprintsCreateIndexLazyRoute: typeof SprintsCreateIndexLazyRoute;
 }
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sprints/': {
-      id: '/sprints/'
-      path: '/sprints'
-      fullPath: '/sprints'
-      preLoaderRoute: typeof SprintsIndexLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/categories/': {
-      id: '/categories/'
-      path: '/categories'
-      fullPath: '/categories'
-      preLoaderRoute: typeof CategoriesIndexLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/': {
-      id: '/dashboard/'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sprints/create/': {
-      id: '/sprints/create/'
-      path: '/sprints/create'
-      fullPath: '/sprints/create'
-      preLoaderRoute: typeof SprintsCreateIndexLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/transactions/create/': {
-      id: '/transactions/create/'
-      path: '/transactions/create'
-      fullPath: '/transactions/create'
-      preLoaderRoute: typeof TransactionsCreateIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sprints/current/': {
-      id: '/sprints/current/'
-      path: '/sprints/current'
-      fullPath: '/sprints/current'
-      preLoaderRoute: typeof SprintsCurrentIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sprints/$sprintId/': {
-      id: '/sprints/$sprintId/'
-      path: '/sprints/$sprintId'
-      fullPath: '/sprints/$sprintId'
-      preLoaderRoute: typeof SprintsSprintIdIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/sprints/": {
+      id: "/sprints/";
+      path: "/sprints";
+      fullPath: "/sprints";
+      preLoaderRoute: typeof SprintsIndexLazyRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/categories/": {
+      id: "/categories/";
+      path: "/categories";
+      fullPath: "/categories";
+      preLoaderRoute: typeof CategoriesIndexLazyRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/dashboard/": {
+      id: "/dashboard/";
+      path: "/dashboard";
+      fullPath: "/dashboard";
+      preLoaderRoute: typeof DashboardIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/sprints/create/": {
+      id: "/sprints/create/";
+      path: "/sprints/create";
+      fullPath: "/sprints/create";
+      preLoaderRoute: typeof SprintsCreateIndexLazyRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/transactions/create/": {
+      id: "/transactions/create/";
+      path: "/transactions/create";
+      fullPath: "/transactions/create";
+      preLoaderRoute: typeof TransactionsCreateIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/sprints/current/": {
+      id: "/sprints/current/";
+      path: "/sprints/current";
+      fullPath: "/sprints/current";
+      preLoaderRoute: typeof SprintsCurrentIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/sprints/$sprintId/": {
+      id: "/sprints/$sprintId/";
+      path: "/sprints/$sprintId";
+      fullPath: "/sprints/$sprintId";
+      preLoaderRoute: typeof SprintsSprintIdIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
   }
 }
 
@@ -211,7 +213,7 @@ const rootRouteChildren: RootRouteChildren = {
   SprintsCurrentIndexRoute: SprintsCurrentIndexRoute,
   TransactionsCreateIndexRoute: TransactionsCreateIndexRoute,
   SprintsCreateIndexLazyRoute: SprintsCreateIndexLazyRoute,
-}
+};
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();

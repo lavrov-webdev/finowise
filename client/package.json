@@ -6,11 +6,10 @@
     "dev": "rsbuild dev",
     "build": "rsbuild build",
     "build:analyze": "BUNDLE_ANALYZE=true rsbuild build",
-    "format": "prettier --write ./src",
     "preview": "rsbuild preview",
     "generate:routes": "tsr generate",
     "generate:client": "openapi-ts -i http://localhost:3001/docs-json -o ./src/generated -c @hey-api/client-axios",
-    "check": "tsc --noEmit && prettier --check ./src"
+    "fix": "tsc --noEmit && prettier -w ./src"
   },
   "dependencies": {
     "@gravity-ui/components": "^4.11.0",

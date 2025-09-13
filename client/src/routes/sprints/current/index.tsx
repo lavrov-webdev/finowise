@@ -1,7 +1,7 @@
 import { Alert } from "@gravity-ui/uikit";
 import {
   DetailSpritnLoader,
-  getCurrentSprintQueryOptions
+  getCurrentSprintQueryOptions,
 } from "@modules/Sprints";
 import { useQuery } from "@tanstack/react-query";
 import { Navigate, createFileRoute } from "@tanstack/react-router";

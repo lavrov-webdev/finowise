@@ -8,8 +8,8 @@ export const useLogout = () => {
     mutationKey: [AUTH_QUERY_KEY],
     mutationFn: () => authControllerLogout(),
     onSuccess: async () => {
-      await queryClient.invalidateQueries()
-      await queryClient.clear()
-    }
+      await queryClient.invalidateQueries();
+      await queryClient.clear();
+    },
   });
 };

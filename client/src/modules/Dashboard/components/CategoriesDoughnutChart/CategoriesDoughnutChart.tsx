@@ -1,10 +1,17 @@
-import { CategoryReportResponseDto } from '@generated';
+import { CategoryReportResponseDto } from "@generated";
 import { formatAmount } from "@system/utils/formatAmount";
-import React, { MouseEventHandler, useMemo } from 'react';
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, Legend } from 'recharts';
-import styles from './CategoriesDoughnutChart.module.scss';
-import _ from 'lodash';
-import { stringToColor } from './utils';
+import React, { MouseEventHandler, useMemo } from "react";
+import {
+  Cell,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  Legend,
+} from "recharts";
+import styles from "./CategoriesDoughnutChart.module.scss";
+import _ from "lodash";
+import { stringToColor } from "./utils";
 
 interface DoughnutChartProps {
   data: CategoryReportResponseDto[];
@@ -18,22 +25,29 @@ type ChartData = {
   name: string;
   value: number;
   categoryId: number;
-}
+};
 
-export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, onClick: _onClick, onCategorySelect, selectedCategoryId }) => {
-  const chartData = useMemo(() =>
-    data.reduce<ChartData[]>((acc, category) => {
-      acc.push({
-        id: category.id,
-        name: category.name,
-        value: category.totalSpend,
-        categoryId: category.id
-      });
-      return acc;
-    }, []),
-    [data]);
+export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({
+  data,
+  onClick: _onClick,
+  onCategorySelect,
+  selectedCategoryId,
+}) => {
+  const chartData = useMemo(
+    () =>
+      data.reduce<ChartData[]>((acc, category) => {
+        acc.push({
+          id: category.id,
+          name: category.name,
+          value: category.totalSpend,
+          categoryId: category.id,
+        });
+        return acc;
+      }, []),
+    [data],
+  );
 
-  const total = useMemo(() => _.sumBy(chartData, 'value'), [chartData]);
+  const total = useMemo(() => _.sumBy(chartData, "value"), [chartData]);
 
   const handleClick = (entry: any) => {
     onCategorySelect?.(entry.categoryId);
@@ -46,7 +60,9 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
       return (
         <div className={styles.tooltip}>
           <p className={styles.tooltipTitle}>{data.name}</p>
-          <p className={styles.tooltipContent}>{formatAmount(data.value)} ({percentage}%)</p>
+          <p className={styles.tooltipContent}>
+            {formatAmount(data.value)} ({percentage}%)
+          </p>
         </div>
       );
     }
@@ -80,10 +96,7 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
           className={styles.pieChart}
         >
           {chartData.map((entry) => (
-            <Cell
-              key={`cell-${entry.id}`}
-              fill={getCellColor(entry)}
-            />
+            <Cell key={`cell-${entry.id}`} fill={getCellColor(entry)} />
           ))}
         </Pie>
         <Tooltip content={<CustomTooltip />} />
@@ -97,4 +110,4 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({ data, on
       </PieChart>
     </ResponsiveContainer>
   );
-}; 
+};

@@ -22,8 +22,9 @@ export const Envelopes = () => {
         <FormRow
           key={envelope.rhfId}
           label={
-            categoriesState.data?.data?.find((c) => c.id === envelope.categoryId)
-              ?.name
+            categoriesState.data?.data?.find(
+              (c) => c.id === envelope.categoryId,
+            )?.name
           }
         >
           <FormAmountInput name={`envelopes.${idx}.amount`} hasClear />

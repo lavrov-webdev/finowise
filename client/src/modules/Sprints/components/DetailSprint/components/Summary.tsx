@@ -36,11 +36,7 @@ export const Summary: FC<Props> = ({ sprintId }) => {
   }
 
   return (
-    <Card
-      title="Подытог"
-      className={styles.summary}
-      maxWidth="none"
-    >
+    <Card title="Подытог" className={styles.summary} maxWidth="none">
       {sprintState.isLoading ? (
         <Flex direction="column" gap={2}>
           <Skeleton width={350} height={22} />

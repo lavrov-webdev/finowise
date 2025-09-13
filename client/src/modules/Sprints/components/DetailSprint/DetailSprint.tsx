@@ -2,7 +2,10 @@ import { Card } from "@components/Card";
 import { ConfirmButton } from "@components/ConfirmButton";
 import { Alert, Flex, Text } from "@gravity-ui/uikit";
 import { EnvelopesPreview, TEnvelopeSummary } from "@modules/Envelopes";
-import { getSprintByIdQueryOptions, useDeleteSprintMutation } from "@modules/Sprints/api";
+import {
+  getSprintByIdQueryOptions,
+  useDeleteSprintMutation,
+} from "@modules/Sprints/api";
 import { TransactionsTable } from "@modules/Transactions";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
