@@ -9,18 +9,18 @@ import { getCurrentSprintQueryOptions } from "@modules/Sprints";
 
 export const CreateTransaction = () => {
   const currentSprintQuery = useQuery(getCurrentSprintQueryOptions())
-  const transactionsState = useQuery(getTransactionsQueryOptions({ filters: { sprintId: currentSprintQuery.data?.data?.id } }));
+  const transactionsState = useQuery(getTransactionsQueryOptions({ query: { sprintId: currentSprintQuery.data?.data?.id } }));
   const renderTransactions = () => {
     if (transactionsState.isLoading) {
       return <Loader />;
     }
-    if (!transactionsState.data?.data) {
+    if (!transactionsState.data?.transactions) {
       return null
     }
     return (
       <Card title="Все транзакции" className={styles.transactions}>
         <TransactionsTable
-          transactions={transactionsState.data.data}
+          transactions={transactionsState.data.transactions}
           columnsKeys={["amount", "date", "category", "comment", "actions"]}
         />
       </Card>
