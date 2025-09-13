@@ -25,7 +25,8 @@ import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { FilterTransactionsDto } from './dto/filter-transactions.dto';
 import {
   TransactionDetailedResponseDto,
-  TransactionResponseDto
+  TransactionResponseDto,
+  TransactionsSearchResponseDto
 } from './dto/transaction.response.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { TransactionsService } from './transactions.service';
@@ -49,12 +50,12 @@ export class TransactionsController {
   }
 
   @Get()
-  @ApiOkResponse({ type: [TransactionDetailedResponseDto] })
+  @ApiOkResponse({ type: TransactionsSearchResponseDto })
   @ApiBadRequestResponse({ description: 'Validation error' })
   search(
     @Query() filterDto: FilterTransactionsDto,
     @Request() req: RequestWithUser,
-  ): Promise<TransactionDetailedResponseDto[]> {
+  ): Promise<TransactionsSearchResponseDto> {
     return this.transactionsService.findTransactions(filterDto, req.user.id);
   }
   

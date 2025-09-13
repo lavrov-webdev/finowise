@@ -156,6 +156,11 @@ export type TransactionResponseDto = {
     userId: number;
 };
 
+export type TransactionsSearchResponseDto = {
+    transactions: Array<TransactionDetailedResponseDto>;
+    total: number;
+};
+
 export type UpdateCategoriesArrayDto = {
     categories: Array<UpdateCategoryDto>;
 };
@@ -410,7 +415,7 @@ export type TransactionsControllerSearchData = {
     };
 };
 
-export type TransactionsControllerSearchResponse = (Array<TransactionDetailedResponseDto>);
+export type TransactionsControllerSearchResponse = (TransactionsSearchResponseDto);
 
 export type TransactionsControllerSearchError = (unknown);
 

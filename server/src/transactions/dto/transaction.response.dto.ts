@@ -34,3 +34,11 @@ export class TransactionDetailedResponseDto extends TransactionResponseDto {
   @ApiProperty({ example: { id: 1, name: 'Test category' } })
   category: CategoryResponseDto;
 }
+
+export class TransactionsSearchResponseDto {
+  @ApiProperty({ type: [TransactionDetailedResponseDto] })
+  transactions: TransactionDetailedResponseDto[];
+
+  @ApiProperty({ example: 1 })
+  total: number;
+}

@@ -9,13 +9,14 @@ type Props = {
   transactions: TransactionDetailedResponseDto[];
   columnsKeys?: TTransactionColumnKey[];
   isPreviousData?: boolean;
+  isLoading?: boolean;
 } & Omit<TableProps<TransactionDetailedResponseDto>, 'data' | 'columns' | 'emptyMessage'>
 
-export const TransactionsTable: FC<Props> = ({ transactions, columnsKeys = ['amount', 'date', 'comment', 'actions'], isPreviousData, ...props }) => {
+export const TransactionsTable: FC<Props> = ({ transactions, columnsKeys = ['amount', 'date', 'comment', 'actions'], isPreviousData, isLoading, ...props }) => {
   const columns = useMemo(() => columnsKeys.map(key => transactionsColumns.find(transactionColumn => transactionColumn.id === key)!), [columnsKeys])
   return (
     <div className={styles.container}>
-      {isPreviousData && (
+      {!isPreviousData && isLoading && (
         <div className={styles.loaderOverlay}>
           <Loader size="l" />
         </div>

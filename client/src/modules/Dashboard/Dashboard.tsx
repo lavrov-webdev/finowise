@@ -1,11 +1,11 @@
 import { Card } from '@components/Card';
-import { Button, Flex, Select, Text } from '@gravity-ui/uikit';
+import { Button, Flex, Pagination, Select, Text } from '@gravity-ui/uikit';
 import { TransactionsTable } from '@modules/Transactions';
 import { getTransactionsQueryOptions } from '@modules/Transactions/api/queryOptions';
 import { formatSprintName } from '@system/utils/formatSprintName';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { DashboardSearchParams } from '../../routes/dashboard';
 import { useGetReport } from './api';
 import { CategoriesDoughnutChart } from './components/CategoriesDoughnutChart';
@@ -15,12 +15,15 @@ import styles from './Dashboard.module.scss';
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const search = useSearch({ from: '/dashboard/' }) as DashboardSearchParams;
-
-  const { data: transactions, isPlaceholderData } = useQuery(
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(50);
+  const transactionsQuery = useQuery(
     getTransactionsQueryOptions({
-      filters: {
+      query: {
         sprintId: search.sprintId,
         categoryId: search.categoryId,
+        limit: pageSize,
+        offset: (page - 1) * pageSize,
       }
     }, {
       keepPrevious: true
@@ -155,10 +158,23 @@ export const Dashboard: React.FC = () => {
       <div className={styles.transactions}>
         <Card maxWidth={"100%"} title='Список транзакций'>
           <TransactionsTable
-            transactions={transactions?.data || []}
+            transactions={transactionsQuery.data?.transactions || []}
             width='max'
-            isPreviousData={isPlaceholderData}
+            isPreviousData={transactionsQuery.isPlaceholderData}
+            isLoading={transactionsQuery.isLoading}
           />
+          <div className={styles.pagination}>
+            <Pagination
+              total={transactionsQuery.data?.total || 0}
+              page={page}
+              pageSize={pageSize}
+              onUpdate={(page, pageSize) => {
+                setPage(page);
+                setPageSize(pageSize);
+              }}
+              pageSizeOptions={[50, 100, 200]}
+            />
+          </div>
         </Card>
       </div>
     </div>

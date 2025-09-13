@@ -5,19 +5,22 @@ import { transactionsControllerSearch, TransactionsControllerSearchData } from "
 
 type QueryKeyParams = {
   id?: number;
-  filters: Omit<TransactionsControllerSearchData["query"], 'id'>
+  query: Omit<TransactionsControllerSearchData["query"], 'id'>;
 };
 
 export const getTransactionsQueryKey = (params?: QueryKeyParams) =>
-  filterUndefined([TRANSACTIONS_QUERY_KEY, params?.id, params?.filters]);
+  filterUndefined([TRANSACTIONS_QUERY_KEY, params?.id, params?.query]);
 
-export const getTransactionsQueryOptions = (filters?: QueryKeyParams, {
+export const getTransactionsQueryOptions = (params?: QueryKeyParams, {
   keepPrevious = true
 }: {
   keepPrevious?: boolean;
 } = {}) =>
   queryOptions({
-    queryKey: getTransactionsQueryKey(filters),
-    queryFn: () => transactionsControllerSearch({ query: filters?.filters }),
+    queryKey: getTransactionsQueryKey(params),
+    queryFn: async () => {
+      const { data } = await transactionsControllerSearch({ query: params?.query });
+      return data;
+    },
     placeholderData: keepPrevious ? keepPreviousData : undefined,
   });
