@@ -1,8 +1,8 @@
-import { CategoryReportResponseDto, SprintReportResponseDto } from "@generated";
 import { BAR_COLOR, UNSELECTED_BAR_COLOR } from "@modules/Dashboard/consts";
+import { getCategoryColor } from "@modules/Dashboard/utils";
 import { formatAmount } from "@system/utils/formatAmount";
 import { formatSprintName } from "@system/utils/formatSprintName";
-import React, { MouseEventHandler, useMemo } from "react";
+import React, { useMemo } from "react";
 import {
   Bar,
   BarChart,
@@ -14,24 +14,7 @@ import {
   YAxis,
 } from "recharts";
 import styles from "./SprintsBarChart.module.scss";
-import { getCategoryColor } from "@modules/Dashboard/utils";
-
-type BarChartData = {
-  sprintId: number;
-  name: string;
-  amount: number;
-  fill: string;
-}
-
-
-interface BarChartProps {
-  data: SprintReportResponseDto[];
-  onClick?: MouseEventHandler<HTMLCanvasElement>;
-  onSprintSelect?: (sprintId: number) => void;
-  selectedSprintId?: number;
-  selectedCategoryId?: number;
-  categories?: CategoryReportResponseDto[];
-}
+import { BarChartData, BarChartProps, BarClickEvent, TooltipContentProps } from "./types";
 
 export const SprintsBarChart: React.FC<BarChartProps> = ({
   data,
@@ -62,29 +45,15 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({
     });
   }, [data, selectedSprintId, selectedCategoryId, categories]);
 
-  const handleClick = (data: any) => {
-    let sprintId: number | undefined;
-
-    if (data && typeof data === "object") {
-      if (data.sprintId !== undefined) {
-        sprintId = +data.sprintId;
-      } else if (data.payload && data.payload.sprintId !== undefined) {
-        sprintId = +data.payload.sprintId;
-      } else if (
-        data.activePayload &&
-        data.activePayload[0] &&
-        data.activePayload[0].payload
-      ) {
-        sprintId = +data.activePayload[0].payload.sprintId;
-      }
-    }
+  const handleClick: BarClickEvent = (data) => {
+    const sprintId = data.payload?.sprintId;
 
     if (sprintId && !isNaN(sprintId)) {
       onSprintSelect?.(sprintId);
     }
   };
 
-  const CustomTooltip = (data: any) => {
+  const CustomTooltip = (data: TooltipContentProps) => {
     const { active, payload, label } = data
     if (active && payload && payload.length) {
       return (
