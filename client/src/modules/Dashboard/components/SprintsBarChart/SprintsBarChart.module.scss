@@ -1,0 +1,21 @@
+.tooltip {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    &Title {
+        margin: 0 0 4px 0;
+        font-weight: bold;
+    }
+
+    &Content {
+        margin: 0;
+        font-weight: bold;
+    }
+}
+
+.chart {
+    cursor: pointer;
+}
