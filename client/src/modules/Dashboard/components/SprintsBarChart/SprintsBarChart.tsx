@@ -1,82 +1,67 @@
-import { SprintReportResponseDto } from "@generated";
-import { BAR_COLOR } from "@modules/Dashboard/consts";
+import { BAR_COLOR, UNSELECTED_BAR_COLOR } from "@modules/Dashboard/consts";
+import { getCategoryColor } from "@modules/Dashboard/utils";
 import { formatAmount } from "@system/utils/formatAmount";
 import { formatSprintName } from "@system/utils/formatSprintName";
-import React, { MouseEventHandler, useMemo } from "react";
+import React, { useMemo } from "react";
 import {
   Bar,
   BarChart,
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
-  Tooltip,
   CartesianGrid,
   Cell,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts";
-
-interface BarChartProps {
-  data: SprintReportResponseDto[];
-  onClick?: MouseEventHandler<HTMLCanvasElement>;
-  onSprintSelect?: (sprintId: number) => void;
-  selectedSprintId?: number;
-}
+import styles from "./SprintsBarChart.module.scss";
+import { BarChartData, BarChartProps, BarClickEvent, TooltipContentProps } from "./types";
 
 export const SprintsBarChart: React.FC<BarChartProps> = ({
   data,
   onClick: _onClick,
   onSprintSelect,
   selectedSprintId,
+  selectedCategoryId,
+  categories,
 }) => {
-  const chartData = useMemo(() => {
-    return data.map((sprint) => ({
-      sprintId: sprint.id,
-      name: formatSprintName(sprint.startDate, sprint.endDate),
-      amount: sprint.totalSpend,
-      fill:
-        selectedSprintId === undefined
-          ? BAR_COLOR
-          : sprint.id === selectedSprintId
-            ? BAR_COLOR
-            : "#D3D3D3",
-    }));
-  }, [data, selectedSprintId]);
-
-  const handleClick = (data: any) => {
-    let sprintId: number | undefined;
-
-    if (data && typeof data === "object") {
-      if (data.sprintId !== undefined) {
-        sprintId = +data.sprintId;
-      } else if (data.payload && data.payload.sprintId !== undefined) {
-        sprintId = +data.payload.sprintId;
-      } else if (
-        data.activePayload &&
-        data.activePayload[0] &&
-        data.activePayload[0].payload
-      ) {
-        sprintId = +data.activePayload[0].payload.sprintId;
+  const chartData = useMemo<BarChartData[]>(() => {
+    return data.map((sprint) => {
+      let fill = UNSELECTED_BAR_COLOR
+      let activeBarColor = BAR_COLOR
+      if (selectedCategoryId !== undefined) {
+        const activeCategory = categories?.find(category => category.id === selectedCategoryId)
+        activeBarColor = activeCategory ? getCategoryColor(activeCategory.name + activeCategory.id) : BAR_COLOR
       }
-    }
+      if (selectedSprintId === sprint.id || selectedSprintId === undefined) {
+        fill = activeBarColor
+      }
+
+      return {
+        sprintId: sprint.id,
+        name: formatSprintName(sprint.startDate, sprint.endDate),
+        amount: sprint.totalSpend,
+        fill,
+      }
+    });
+  }, [data, selectedSprintId, selectedCategoryId, categories]);
+
+  const handleClick: BarClickEvent = (data) => {
+    const sprintId = data.payload?.sprintId;
 
     if (sprintId && !isNaN(sprintId)) {
       onSprintSelect?.(sprintId);
     }
   };
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = (data: TooltipContentProps) => {
+    const { active, payload, label } = data
     if (active && payload && payload.length) {
       return (
         <div
-          style={{
-            backgroundColor: "white",
-            border: "1px solid #ccc",
-            borderRadius: "4px",
-            padding: "8px",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-          }}
+          className={styles.tooltip}
         >
-          <p style={{ margin: "0 0 4px 0", fontWeight: "bold" }}>{label}</p>
-          <p style={{ margin: "0", color: BAR_COLOR }}>
+          <p className={styles.tooltipTitle}>{label}</p>
+          <p style={{ color: payload[0].payload.fill }} className={styles.tooltipContent}>
             {formatAmount(payload[0].value)}
           </p>
         </div>
@@ -87,7 +72,7 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({
 
   return (
     <ResponsiveContainer width="100%" height={350}>
-      <BarChart data={chartData} style={{ cursor: "pointer" }}>
+      <BarChart data={chartData} className={styles.chart}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
           type="category"
@@ -108,7 +93,10 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({
           onMouseDown={handleClick}
         >
           {chartData.map((entry) => (
-            <Cell key={`cell-${entry.sprintId}`} fill={entry.fill} />
+            <Cell
+              key={`cell-${entry.sprintId}`}
+              fill={entry.fill}
+            />
           ))}
         </Bar>
       </BarChart>

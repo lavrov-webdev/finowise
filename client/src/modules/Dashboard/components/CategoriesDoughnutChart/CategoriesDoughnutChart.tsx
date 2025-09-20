@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import styles from "./CategoriesDoughnutChart.module.scss";
 import _ from "lodash";
-import { stringToColor } from "./utils";
+import { getCategoryColor } from "@modules/Dashboard/utils";
 
 interface DoughnutChartProps {
   data: CategoryReportResponseDto[];
@@ -71,11 +71,11 @@ export const CategoriesDoughnutChart: React.FC<DoughnutChartProps> = ({
 
   const getCellColor = (entry: any) => {
     if (selectedCategoryId === undefined) {
-      return stringToColor(entry.name + entry.categoryId);
+      return getCategoryColor(entry.name + entry.categoryId);
     }
 
     if (entry.categoryId === selectedCategoryId) {
-      return stringToColor(entry.name + entry.categoryId);
+      return getCategoryColor(entry.name + entry.categoryId);
     }
 
     return "#D3D3D3";
