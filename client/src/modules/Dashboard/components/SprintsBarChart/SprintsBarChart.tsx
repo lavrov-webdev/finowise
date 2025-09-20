@@ -94,6 +94,7 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({
         >
           {chartData.map((entry) => (
             <Cell
+              className={styles.cell}
               key={`cell-${entry.sprintId}`}
               fill={entry.fill}
             />
