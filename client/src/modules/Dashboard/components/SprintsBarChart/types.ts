@@ -17,7 +17,6 @@ export type BarChartData = {
     fill: string;
 }
 
-// Типы для событий Bar компонента
 export type BarRectangleItem = {
     value: number | [number, number];
     x: number;
@@ -30,7 +29,6 @@ export type BarRectangleItem = {
 
 export type BarClickEvent = (data: BarRectangleItem, index: number, event: React.MouseEvent<SVGPathElement, MouseEvent>) => void;
 
-// Типы для Tooltip
 export type TooltipPayload = {
     value: number;
     name: string;

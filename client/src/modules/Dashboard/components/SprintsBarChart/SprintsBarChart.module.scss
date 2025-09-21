@@ -23,3 +23,18 @@
 .cell {
     cursor: pointer;
 }
+
+.xAxisDot {
+    cursor: pointer;
+    transition: fill 0.2s ease;
+    
+    &:hover {
+        fill: #333;
+        r: 5;
+    }
+
+    &Popover {
+        padding-block: 3px;
+        padding-inline: 5px;
+    }
+}

@@ -13,8 +13,10 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { CustomTooltip } from "./components/CustomTooltip";
+import { CustomXAxisTick } from "./components/CustomXAxisTick";
 import styles from "./SprintsBarChart.module.scss";
-import { BarChartData, BarChartProps, BarClickEvent, TooltipContentProps } from "./types";
+import { BarChartData, BarChartProps, BarClickEvent } from "./types";
 
 export const SprintsBarChart: React.FC<BarChartProps> = ({
   data,
@@ -53,23 +55,6 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({
     }
   };
 
-  const CustomTooltip = (data: TooltipContentProps) => {
-    const { active, payload, label } = data
-    if (active && payload && payload.length) {
-      return (
-        <div
-          className={styles.tooltip}
-        >
-          <p className={styles.tooltipTitle}>{label}</p>
-          <p style={{ color: payload[0].payload.fill }} className={styles.tooltipContent}>
-            {formatAmount(payload[0].value)}
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
-
   return (
     <ResponsiveContainer width="100%" height={350}>
       <BarChart data={chartData} className={styles.chart}>
@@ -77,9 +62,10 @@ export const SprintsBarChart: React.FC<BarChartProps> = ({
         <XAxis
           type="category"
           dataKey="name"
-          angle={-45}
-          textAnchor="end"
-          height={100}
+          tick={<CustomXAxisTick />}
+          height={50}
+          axisLine={false}
+          tickLine={false}
         />
         <YAxis
           type="number"
